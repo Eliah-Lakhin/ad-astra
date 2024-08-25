@@ -128,12 +128,15 @@ require([
     });
 
     const CONTAINER_ELEMENT = document.getElementById('editor-container');
+    const LOADING_PLACEHOLDER_ELEMENT = document.getElementById('editor-placeholder');
     const LAUNCH_ELEMENT = document.getElementById('editor-launch-btn');
     const CLEANUP_ELEMENT = document.getElementById('editor-cleanup-btn');
     const STOP_ELEMENT = document.getElementById('editor-stop-btn');
     const HINTS_ELEMENT = document.getElementById('editor-hints-btn');
     const EDITOR_CONSOLE_ELEMENT = document.getElementById('editor-console');
     const EXAMPLE_SELECT_ELEMENT = document.getElementById('example-select');
+
+    LOADING_PLACEHOLDER_ELEMENT.remove();
 
     const LSP_SERVER = new LspServer(
         CLIENT_NAME,
@@ -233,14 +236,14 @@ require([
     function syncExample() {
         let name = EXAMPLE_SELECT_ELEMENT.value;
 
-        EXAMPLE_SELECT_ELEMENT.setAttribute('disabled', 'disabled');
-
         interruptFlag = true;
-        setLaunchingState(false);
         LSP_CLIENT.clearLineMessages();
         LSP_CLIENT.renderInlayHints();
         LSP_CLIENT.lockModel();
+        setLaunchingState(false);
         setMessagesState(false);
+
+        EXAMPLE_SELECT_ELEMENT.setAttribute('disabled', 'disabled');
 
         modelLoaded = LSP_CLIENT.loadModel(EXAMPLE_PATH.replace(/name/g, name));
 

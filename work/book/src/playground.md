@@ -84,6 +84,7 @@ html.adastra-theme {
     <div
         id="editor-container"
         style="
+            display: flex;
             padding: 0;
             flex: 1;
             background: #424949;
@@ -91,7 +92,21 @@ html.adastra-theme {
             border-color: #b3b6b7;
             border-width: 1px 1px 0 1px;
         "
-    ></div>
+    ><div
+        id="editor-placeholder"
+        style="
+            flex: 1;
+            padding: 0;
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        "
+    >
+        Loading...
+    </div></div>
     <div style="padding: 0; margin: 0; display: flex; width: 100%;;">
         <div style="
             background: #e0e0e0;
