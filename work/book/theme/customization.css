@@ -1,0 +1,214 @@
+/******************************************************************************/
+/* This file is part of "Ad Astra", an embeddable scripting programming       */
+/* language platform.                                                         */
+/*                                                                            */
+/* This work is proprietary software with source-available code.              */
+/*                                                                            */
+/* To copy, use, distribute, or contribute to this work, you must agree to    */
+/* the terms of the General License Agreement:                                */
+/*                                                                            */
+/* https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md               */
+/*                                                                            */
+/* The agreement grants a Basic Commercial License, allowing you to use       */
+/* this work in non-commercial and limited commercial products with a total   */
+/* gross revenue cap. To remove this commercial limit for one of your         */
+/* products, you must acquire a Full Commercial License.                      */
+/*                                                                            */
+/* If you contribute to the source code, documentation, or related materials, */
+/* you must grant me an exclusive license to these contributions.             */
+/* Contributions are governed by the "Contributions" section of the General   */
+/* License Agreement.                                                         */
+/*                                                                            */
+/* Copying the work in parts is strictly forbidden, except as permitted       */
+/* under the General License Agreement.                                       */
+/*                                                                            */
+/* If you do not or cannot agree to the terms of this Agreement,              */
+/* do not use this work.                                                      */
+/*                                                                            */
+/* This work is provided "as is", without any warranties, express or implied, */
+/* except where such disclaimers are legally invalid.                         */
+/*                                                                            */
+/* Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).                 */
+/* All rights reserved.                                                       */
+/******************************************************************************/
+
+html.adastra-theme .language-adastra .hljs-comment {
+    color: #b3b6b7;
+}
+
+html.adastra-theme .language-adastra .hljs-number,
+html.adastra-theme .language-adastra .hljs-literal,
+html.adastra-theme .language-adastra .hljs-string {
+    color: #abebc6;
+}
+
+html.adastra-theme .language-adastra .hljs-keyword {
+    color: #fad7a0;
+}
+
+
+html.adastra-theme .language-rust .hljs-built_in,
+html.adastra-theme .language-rust .hljs-meta {
+    color: #7d6608;
+}
+
+html.adastra-theme .language-rust .hljs-type {
+    color: #212121;
+}
+
+html.adastra-theme .language-rust .hljs-keyword {
+    color: #1b4f72;
+}
+
+html.adastra-theme .language-rust .hljs-title {
+    color: #33691e;
+}
+
+html.adastra-theme .language-rust .hljs-number {
+    color: #212121;
+}
+
+html.adastra-theme .language-rust .hljs-variable {
+    color: #212121;
+}
+
+html.adastra-theme .hljs {
+    border-radius: 4px;
+    background: #d7dbdd;
+}
+
+html.adastra-theme .hljs.language-adastra,
+html.adastra-theme .hljs.language-text {
+    display: block;
+    overflow-x: auto;
+    background: #424949;
+    color: #f2f4f4;
+    border: 1px solid #95a5a6;
+}
+
+html.adastra-theme .hljs.language-rust {
+    background: #e0e0e0;
+    border: 1px solid #95a5a6;
+}
+
+@media print {
+    html.adastra-theme .hljs.language-adastra,
+    html.adastra-theme .hljs.language-text {
+        color: var(--fg);
+    }
+
+    html.adastra-theme .language-adastra .hljs-number,
+    html.adastra-theme .language-adastra .hljs-literal,
+    html.adastra-theme .language-adastra .hljs-string {
+        color: #145a32;
+    }
+
+    html.adastra-theme .language-adastra .hljs-keyword {
+        color: #7d6608;
+    }
+}
+
+html.adastra-theme .hljs.language-adastra:before {
+    display: block;
+    content: '🚀';
+    float: right;
+    font-size: 1.6em;
+    opacity: 0.35;
+}
+
+@media print {
+    html.adastra-theme .hljs.language-adastra:before {
+        display: none;
+    }
+}
+
+html.adastra-theme .hljs.language-rust:before {
+    display: block;
+    content: '🦀';
+    float: right;
+    font-size: 1.6em;
+    opacity: 0.35;
+}
+
+@media print {
+    html.adastra-theme .hljs.language-rust:before {
+        display: none;
+    }
+}
+
+html.adastra-theme #theme-toggle {
+    display: none;
+}
+
+html.adastra-theme #sidebar-resize-handle {
+    display: none;
+}
+
+* {
+    font-optical-sizing: auto;
+    font-variant-ligatures: none;
+}
+
+html.adastra-theme .sidebar .sidebar-scrollbox {
+    padding: 10px 20px;
+}
+
+html.adastra-theme p code {
+    border-radius: 4px;
+    border: none;
+    background: #eeeeee;
+}
+
+html.adastra-theme .mobile-nav-chapters {
+    background: var(--scrollbar);
+}
+
+html.adastra-theme .chapter .spacer {
+    height: 1px;
+}
+
+html.adastra-theme {
+    --mono-font: "JetBrains Mono", "Source Code Pro", Consolas, "Ubuntu Mono", Menlo, "DejaVu Sans Mono", monospace, monospace;
+
+    --bg: #eeeeee;
+    --fg: #17202a;
+
+    --sidebar-bg: #424949;
+    --sidebar-fg: #f4f6f7;
+    --sidebar-non-existant: #ebedef;
+    --sidebar-active: #fad7a0;
+    --sidebar-spacer: #979a9a;
+
+    --scrollbar: #85929e;
+
+    --icons: #9e9e9e;
+    --icons-hover: #212121;
+
+    --links: #7e5109;
+
+    --inline-code-color: #17202a;
+
+    --theme-popup-bg: #f4f6f6;
+    --theme-popup-border: #85929e;
+    --theme-hover: #85929e;
+
+    --quote-bg: hsl(60, 5%, 75%);
+    --quote-border: hsl(60, 5%, 70%);
+
+    --warning-border: #ff8e00;
+
+    --table-border-color: #979a9a;
+    --table-header-bg: #979a9a;
+    --table-alternate-bg: #e5e7e9;
+
+    --searchbar-border-color: #aaa;
+    --searchbar-bg: #d5dbdb;
+    --searchbar-fg: #000;
+    --searchbar-shadow-color: #aaa;
+    --searchresults-header-fg: #666;
+    --searchresults-border-color: #888;
+    --searchresults-li-bg: #dec2a2;
+    --search-mark-bg: #e69f67;
+
+    --color-scheme: light dark;
+}

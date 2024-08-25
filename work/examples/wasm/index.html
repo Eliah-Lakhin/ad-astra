@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ad Astra Demo</title>
+    </head>
+    <body style="padding: 0 20%">
+        <div style="display: flex; flex-direction: column; height: 90vh">
+            <div style="margin: 0; padding: 0">
+                <p>
+                    The server and client logs are in the browser's console
+                    (Ctrl+Shift+J)
+                </p>
+                <p>Press Ctrl+S in the editor's window to format the code.</p>
+                <p>
+                    <button id="launch">Launch</button>
+                    <button id="stop">Stop</button>
+                </p>
+            </div>
+            <div
+                id="container"
+                style="flex: 1; overflow: hidden; border: 1px solid black"
+            ></div>
+        </div>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"
+            integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+            data-main="index"
+        ></script>
+    </body>
+</html>

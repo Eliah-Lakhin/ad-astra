@@ -1,0 +1,33 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "scopeName": "source.adastra",
+    "foldingStartMarker": "\\{\\s*$",
+    "foldingStopMarker": "^\\s*\\}",
+    "patterns": [
+        {
+            "name": "comment.line",
+            "match": "//.*$"
+        },
+        {
+            "name": "comment.block",
+            "begin": "/\\*",
+            "end": "\\*/"
+        },
+        {
+            "name": "string",
+            "match": "\"((\\\\.)|[^\"])*\""
+        },
+        {
+            "name": "constant.numeric",
+            "match": "[0-9]+"
+        },
+        {
+            "name": "keyword",
+            "match": "\\b(fn|let|struct|use|for|in|loop|break|continue|return|if|else|match|true|false|crate|self|max|len)\\b"
+        },
+        {
+            "name": "identifier",
+            "match": "\\b[a-zA-Z][a-zA-Z0-9]*\\b"
+        }
+    ]
+}

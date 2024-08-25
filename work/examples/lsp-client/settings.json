@@ -1,0 +1,15 @@
+{
+    "[adastra]": {
+        "editor.defaultFormatter": "undefined_publisher.ad-astra-example",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4,
+        "editor.wordBasedSuggestions": "off",
+        "editor.inlayHints.enabled": "onUnlessPressed",
+        "editor.hover.sticky": false,
+        "editor.linkedEditing": false,
+        "editor.bracketPairColorization.enabled": false
+    },
+    "adastra.lspServerMode": "IO",
+    "adastra.lspServerPath": "",
+    "adastra.lspServerPort": 8081
+}

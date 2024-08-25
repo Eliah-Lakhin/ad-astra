@@ -1,0 +1,105 @@
+################################################################################
+# This file is part of "Ad Astra", an embeddable scripting programming         #
+# language platform.                                                           #
+#                                                                              #
+# This work is proprietary software with source-available code..               #
+#                                                                              #
+# To copy, use, distribute, or contribute to this work, you must agree to.     #
+# the terms of the General License Agreement:.                                 #
+#                                                                              #
+# https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md.                #
+#                                                                              #
+# The agreement grants a Basic Commercial License, allowing you to use.        #
+# this work in non-commercial and limited commercial products with a total.    #
+# gross revenue cap. To remove this commercial limit for one of your.          #
+# products, you must acquire a Full Commercial License..                       #
+#                                                                              #
+# If you contribute to the source code, documentation, or related materials,.  #
+# you must grant me an exclusive license to these contributions..              #
+# Contributions are governed by the "Contributions" section of the General.    #
+# License Agreement..                                                          #
+#                                                                              #
+# Copying the work in parts is strictly forbidden, except as permitted.        #
+# under the General License Agreement..                                        #
+#                                                                              #
+# If you do not or cannot agree to the terms of this Agreement,.               #
+# do not use this work..                                                       #
+#                                                                              #
+# This work is provided "as is", without any warranties, express or implied,.  #
+# except where such disclaimers are legally invalid.                           #
+#                                                                              #
+# Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин)..                  #
+# All rights reserved..                                                        #
+################################################################################
+
+[package]
+name = "ad-astra"
+version = "1.0.0"
+authors = ["Ilya Lakhin (Илья Александрович Лахин) <eliah.lakhin@gmail.com>"]
+edition = "2021"
+rust-version = "1.79"
+description = "Embeddable scripting language platform Ad Astra. Main Crate."
+keywords = ["language", "scripting", "scripting-language", "scripting-engine"]
+categories = ["compilers", "emulators", "memory-management", "parser-implementations", "wasm"]
+readme = "../../../README.md"
+license-file = "../../../EULA.md"
+documentation = "https://docs.rs/ad-astra"
+repository = "https://github.com/Eliah-Lakhin/ad-astra"
+publish = true
+
+[features]
+default = ["export", "lsp"]
+
+export = ["ad-astra-export/export"]
+lsp = ["serde", "serde_json", "lsp-types", "syslog"]
+shallow = ["export", "ad-astra-export/shallow"]
+
+[dependencies.ad-astra-export]
+version = "1.0"
+path = "../export"
+features = []
+default-features = false
+
+[dependencies.lady-deirdre]
+version = "2.0"
+
+[dependencies.semver]
+version = "1.0"
+
+[dependencies.compact_str]
+version = "0.7"
+features = ["serde"]
+
+[dependencies.strsim]
+version = "0.11"
+
+[dependencies.cast]
+version = "0.3"
+
+[dependencies.log]
+version = "0.4"
+
+[dependencies.serde]
+optional = true
+version = "1.0"
+features = ["derive"]
+
+[dependencies.serde_json]
+optional = true
+version = "1.0"
+
+[dependencies.lsp-types]
+optional = true
+version = "0.97"
+
+[target.'cfg(not(target_family = "wasm"))'.dependencies.syslog]
+optional = true
+version = "6.1"
+
+[target.'cfg(target_family = "wasm")'.dependencies.ahash]
+version = "0.8"
+default-features = false
+features = ["std", "compile-time-rng"]
+
+[target.'cfg(not(target_family = "wasm"))'.dependencies.ahash]
+version = "0.8"

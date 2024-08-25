@@ -1,0 +1,71 @@
+{
+    "name": "ad-astra-example",
+    "displayName": "ad-astra-example",
+    "description": "Ad Astra VsCode Extension Example",
+    "version": "0.0.0",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "activationEvents": [],
+    "main": "./out/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "adastra",
+                "extensions": [
+                    ".adastra"
+                ],
+                "aliases": [
+                    "Ad Astra"
+                ],
+                "filenames": [],
+                "firstLine": "^#!/.*\\badastra\\b",
+                "configuration": "./language.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "adastra",
+                "scopeName": "source.adastra",
+                "path": "./grammar.json"
+            }
+        ],
+        "configuration": {
+            "title": "Ad Astra LSP server settings",
+            "properties": {
+                "adastra.lspServerMode": {
+                    "type": "string",
+                    "default": null,
+                    "description": "Values: 'IO' or 'TCP'."
+                },
+                "adastra.lspServerPath": {
+                    "type": "string",
+                    "default": null,
+                    "description": "A path to the Cargo.toml file of the LSP server (for the IO mode)."
+                },
+                "adastra.lspServerPort": {
+                    "type": "number",
+                    "default": 8081,
+                    "description": "A TCP port of the LSP server (for the TCP mode)."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^9.0.1",
+        "typescript": "^5.3.2"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.85.0",
+        "@types/node": "18.x"
+    }
+}

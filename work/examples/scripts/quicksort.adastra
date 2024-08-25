@@ -1,0 +1,48 @@
+let algorithm = struct {
+    quicksort: fn(array) {
+        if array.len == 0 {
+            return;
+        }
+
+        let part_idx = self.partition(array);
+
+        if part_idx > 0 {
+            self.quicksort(array[0..part_idx - 1]);
+        }
+
+        if part_idx < array.len - 1 {
+            self.quicksort(array[part_idx + 1..array.len]);
+        }
+    },
+
+    partition: fn(array) {
+        let pivot = array[array.len - 1];
+
+        let i = 0;
+        for j in 0..array.len - 1 {
+            if array[j] <= pivot {
+                self.swap(array[i], array[j]);
+                i += 1;
+            }
+        }
+
+        self.swap(array[i], array[array.len - 1]);
+
+        return i + 1;
+    },
+
+    swap: fn(a, b) {
+        let tmp = *a;
+        a = b;
+        b = tmp;
+    },
+};
+
+let array = [388, 896, 272, 34, 856, 621, 841, 3, 147, 243, 671, 958, 865, 474,
+    219, 712, 60, 666, 854, 354];
+
+algorithm.quicksort(array);
+
+for i in 0..array.len {
+    dbg(array[i]);
+}
