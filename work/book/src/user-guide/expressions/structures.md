@@ -51,7 +51,7 @@ let my_object = struct {
     },
 };
 
-my_object.some_field(3, 4);
+my_object.some_method(3, 4);
 
 my_object.field_2 == 700;
 ```
