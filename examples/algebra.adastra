@@ -1,0 +1,17 @@
+use algebra;
+
+let vector = vec(0.0, 1.0);
+
+vector.x = 1.0;
+vector.y = 0.0;
+
+let matrix = rotation(deg(40)) * rotation(deg(-10));
+
+for x in 0..13 {
+    let rot = x * 30;
+    let angle = round(rad(vector.angle()));
+
+    dbg(["", rot, " deg is ", angle, " deg."]);
+
+    vector.transform(matrix).normalize();
+}

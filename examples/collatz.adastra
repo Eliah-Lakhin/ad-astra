@@ -1,0 +1,20 @@
+let number = 232424097; // Put any positive integer here.
+
+let step = 0;
+
+dbg(["Step 0: ", number]);
+
+loop {
+    step += 1;
+
+    match number % 2 == 0 {
+        true => number /= 2,
+        false => number = number * 3 + 1,
+    }
+
+    dbg(["Step ", step, ": ", number]);
+
+    if number == 1 {
+        break;
+    }
+}

@@ -1,0 +1,31 @@
+let vec = fn(x, y) struct {
+    x: x,
+    y: y,
+
+    add: fn(other) {
+        let a = self.format();
+        let b = other.format();
+
+        self.x += other.x;
+        self.y += other.y;
+
+        dbg([a, " + ", b, " = ", self.format()]);
+
+        return self;
+    },
+
+    dot: fn(other) {
+        let a = self.format();
+        let b = other.format();
+
+        let product = self.x * other.x + self.y * other.y;
+
+        dbg([a, " * ", b, " = ", product]);
+
+        return product;
+    },
+
+    format: fn() ["vec(", self.x, ", ", self.y, ")"],
+};
+
+return vec(10, 0).add(vec(0, 20)).add(vec(1, 0)).dot(vec(2, 3));

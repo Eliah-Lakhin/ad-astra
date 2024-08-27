@@ -1,0 +1,396 @@
+<!DOCTYPE HTML>
+<html lang="en" class="adastra-theme" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Functions - The Ad Astra Book</title>
+
+
+        <!-- Custom HTML head -->
+        <!------------------------------------------------------------------------------
+          This file is part of "Ad Astra", an embeddable scripting programming
+          language platform.
+        
+          This work is proprietary software with source-available code.
+        
+          To copy, use, distribute, or contribute to this work, you must agree to
+          the terms of the General License Agreement:
+        
+          https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+        
+          The agreement grants a Basic Commercial License, allowing you to use
+          this work in non-commercial and limited commercial products with a total
+          gross revenue cap. To remove this commercial limit for one of your
+          products, you must acquire a Full Commercial License.
+        
+          If you contribute to the source code, documentation, or related materials,
+          you must grant me an exclusive license to these contributions.
+          Contributions are governed by the "Contributions" section of the General
+          License Agreement.
+        
+          Copying the work in parts is strictly forbidden, except as permitted
+          under the General License Agreement.
+        
+          If you do not or cannot agree to the terms of this Agreement,
+          do not use this work.
+        
+          This work is provided "as is", without any warranties, express or implied,
+          except where such disclaimers are legally invalid.
+        
+          Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+          All rights reserved.
+        ------------------------------------------------------------------------------->
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet"
+        />
+        <script src="../../extra/libs/highlight.min.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/customization.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "adastra-theme" : "adastra-theme";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('adastra-theme')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../../playground.html">Playground</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="../../user-guide/syntax-overview.html">Syntax Overview</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow.html">Control Flow</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user-guide/control-flow/variables.html">Variables</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/expression-statements.html">Expression Statements</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/nested-blocks.html">Nested Blocks</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/imports.html">Imports</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/loop-statements.html">Loop Statements</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/conditional-branching.html">Conditional Branching</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/returning-statements.html">Returning Statements</a></li></ol></li><li class="chapter-item expanded "><a href="../../user-guide/expressions.html">Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user-guide/expressions/operators-priority.html">Operators Priority</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/arrays.html">Arrays</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/nil-data.html">Nil Data</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/strings.html">Strings</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/numbers.html">Numbers</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/booleans.html">Booleans</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/ranges.html">Ranges</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/functions.html">Functions</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/structures.html">Structures</a></li></ol></li><li class="chapter-item expanded "><a href="../../user-guide/mutability.html">Mutability</a></li><li class="chapter-item expanded "><a href="../../user-guide/type-system.html">Type System</a></li><li class="chapter-item expanded "><a href="../../user-guide/memory-model.html">Memory Model</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Developer Guide</li><li class="chapter-item expanded "><a href="../../developer-guide/api-overview.html">API Overview</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting.html">Exporting</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../developer-guide/exporting/script-packages.html">Script Packages</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/functions.html" class="active">Functions</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/structs.html">Structs</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/operators.html">Operators</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/comments.html">Comments</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/statics-and-consts.html">Statics and Consts</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/advanced-export.html">Advanced Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis.html">Analysis</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../developer-guide/analysis/access-guards.html">Access Guards</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/module-text.html">Module Text</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/diagnostics.html">Diagnostics</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/editing.html">Editing</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/advanced-analysis.html">Advanced Analysis</a></li></ol></li><li class="chapter-item expanded "><a href="../../developer-guide/evaluation.html">Evaluation</a></li><li class="chapter-item expanded "><a href="../../developer-guide/language-server.html">Language Server</a></li><li class="chapter-item expanded "><a href="../../developer-guide/web-assembly.html">Web Assembly</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">The Ad Astra Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Eliah-Lakhin/ad-astra" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!------------------------------------------------------------------------------
+  This file is part of "Ad Astra", an embeddable scripting programming
+  language platform.
+
+  This work is proprietary software with source-available code.
+
+  To copy, use, distribute, or contribute to this work, you must agree to
+  the terms of the General License Agreement:
+
+  https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+
+  The agreement grants a Basic Commercial License, allowing you to use
+  this work in non-commercial and limited commercial products with a total
+  gross revenue cap. To remove this commercial limit for one of your
+  products, you must acquire a Full Commercial License.
+
+  If you contribute to the source code, documentation, or related materials,
+  you must grant me an exclusive license to these contributions.
+  Contributions are governed by the "Contributions" section of the General
+  License Agreement.
+
+  Copying the work in parts is strictly forbidden, except as permitted
+  under the General License Agreement.
+
+  If you do not or cannot agree to the terms of this Agreement,
+  do not use this work.
+
+  This work is provided "as is", without any warranties, express or implied,
+  except where such disclaimers are legally invalid.
+
+  Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+  All rights reserved.
+------------------------------------------------------------------------------->
+<h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+<p>To export a crate-global function, you should annotate it with the
+<a href="https://docs.rs/ad-astra/1.0.0/ad_astra/attr.export.html">#[export]</a> attribute macro.</p>
+<pre><code class="language-rust ignore">#[export]
+fn round(value: f64) -&gt; i64 {
+    value.round() as i64
+}</code></pre>
+<p>The parameter types and the return type must be types that are also exported to
+the script environment<sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<p>By default, eligible types include:</p>
+<ul>
+<li>All Rust primitive numeric types: <code>isize</code>, <code>f32</code>, <code>u8</code>, etc.</li>
+<li>The boolean type: <code>bool</code>.</li>
+<li>Rust string types: <code>&amp;str</code> and <code>String</code>.</li>
+<li>Ranges of unsigned integers: <code>Range&lt;usize&gt;</code>, <code>RangeFrom&lt;usize&gt;</code>, etc.</li>
+<li>The unit type <code>()</code>.</li>
+<li>Tuples of other eligible types: <code>(bool, String)</code>.</li>
+<li>Slices and fixed-size arrays of eligible types: <code>&amp;[u32]</code>, <code>[u32; 6]</code>, etc.</li>
+<li>A box of an eligible type: <code>Box&lt;(bool, String)&gt;</code>.</li>
+<li>An option of an eligible type: <code>Option&lt;[u8; 12]&gt;</code>.</li>
+<li>A copy-on-write object of an eligible type with an implicit <code>'static</code>
+lifetime: <code>Cow&lt;str&gt;</code>.</li>
+<li>A result of an eligible type: <code>Result&lt;usize, Err&gt;</code>, where the error variant
+must be a Rust standard error type that is <code>Send + Sync + 'static</code>.</li>
+<li>Certain forms of callback functions.</li>
+</ul>
+<p>To make additional types eligible, they should be exported either in this crate
+or in any dependency crate.</p>
+<h2 id="function-names"><a class="header" href="#function-names">Function Names</a></h2>
+<p>All exported crate functions, regardless of their Rust visibility, will be
+available in scripts within a common flat namespace, under the script package of
+the crate, using their original Rust function names.</p>
+<p>Therefore, their names must be unique within the crate.</p>
+<p>To export two independent functions with the same name, you should rename them.</p>
+<pre><code class="language-rust ignore">#[export]
+fn foo() {}
+
+mod bar {
+    #[export(name "foo_from_bar")]
+    fn foo() {}
+}</code></pre>
+<p>In the script environment, these functions will be exposed as follows:</p>
+<pre><code class="language-adastra">foo();
+foo_from_bar();
+
+// Or:
+
+crate.foo();
+crate.foo_from_bar();
+</code></pre>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<p>You can export functions with references in the input positions if the lifetimes
+of the references are elided. In other words, you can specify references, but
+you cannot explicitly specify their lifetimes.</p>
+<pre><code class="language-rust ignore">#[export]
+fn addup(result: &amp;mut usize, arg_1: &amp;usize, arg_2: usize) {
+    *result += *arg_1 + arg_2;
+}</code></pre>
+<pre><code class="language-adastra">let result = 10;
+ 
+addup(result, 7, 2);
+
+result == 19;
+</code></pre>
+<h2 id="callbacks"><a class="header" href="#callbacks">Callbacks</a></h2>
+<p>You can use callback functions as types for the input and output of exported
+functions, but only in certain forms.</p>
+<pre><code class="language-rust ignore">#[export]
+fn foo(
+    arg_1: usize,
+    arg_2: Box&lt;dyn Fn(usize, usize) -&gt; RuntimeResult&lt;String&gt; + Send + Sync&gt;,
+) -&gt; RuntimeResult&lt;String&gt; {
+    let mut result = arg_2(arg_1, 10)?;
+    
+    result.push_str(". Some suffix".);
+    
+    Ok(result)
+}</code></pre>
+<pre><code class="language-adastra">let result = foo(50, fn(x, y) ["Result is: ", x + y]);
+
+result == "Result is: 60. Some suffix.";
+</code></pre>
+<p>The callback function must be a boxed Rust anonymous function (<code>Box&lt;dyn&gt;</code>) that
+accepts up to 7 arguments and returns a value wrapped in the
+<a href="https://docs.rs/ad-astra/1.0.0/ad_astra/runtime/type.RuntimeResult.html">RuntimeResult</a>
+result object.</p>
+<p>The function passed into the Rust code is likely to be a script-defined function
+that will be evaluated by the Ad Astra runtime, which can be error-prone.</p>
+<p>The exported function implementation can pass the callback's errors back to the
+script environment. Therefore, in the example above, the function <code>foo</code> also
+returns a <code>RuntimeResult</code>.</p>
+<p>To simplify Rust signatures, you can use one of the predefined type aliases for
+callbacks.</p>
+<pre><code class="language-rust ignore">use ad_astra::runtime::ops::Fn2;
+
+// The first two Fn2 generic parameters are the types of the inputs,
+// and the last one is the result type.
+#[export]
+fn foo(arg_1: usize, arg_2: Fn2&lt;usize, usize, String&gt;) -&gt; RuntimeResult&lt;String&gt; {
+    let mut result = arg_2(arg_1, 10)?;
+    
+    result.push_str(". Some suffix.");
+    
+    Ok(result)
+}</code></pre>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Or types that can be cast to exported types. For example, the
+<code>Option&lt;f32&gt;</code> type is not an exported type, but the engine is capable of casting
+a Rust <code>Option</code> to the exported <code>f32</code> type.</p>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../developer-guide/exporting/script-packages.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../developer-guide/exporting/structs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../developer-guide/exporting/script-packages.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../developer-guide/exporting/structs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+
+
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

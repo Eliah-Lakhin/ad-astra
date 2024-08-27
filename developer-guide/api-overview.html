@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en" class="adastra-theme" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>API Overview - The Ad Astra Book</title>
+
+
+        <!-- Custom HTML head -->
+        <!------------------------------------------------------------------------------
+          This file is part of "Ad Astra", an embeddable scripting programming
+          language platform.
+        
+          This work is proprietary software with source-available code.
+        
+          To copy, use, distribute, or contribute to this work, you must agree to
+          the terms of the General License Agreement:
+        
+          https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+        
+          The agreement grants a Basic Commercial License, allowing you to use
+          this work in non-commercial and limited commercial products with a total
+          gross revenue cap. To remove this commercial limit for one of your
+          products, you must acquire a Full Commercial License.
+        
+          If you contribute to the source code, documentation, or related materials,
+          you must grant me an exclusive license to these contributions.
+          Contributions are governed by the "Contributions" section of the General
+          License Agreement.
+        
+          Copying the work in parts is strictly forbidden, except as permitted
+          under the General License Agreement.
+        
+          If you do not or cannot agree to the terms of this Agreement,
+          do not use this work.
+        
+          This work is provided "as is", without any warranties, express or implied,
+          except where such disclaimers are legally invalid.
+        
+          Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+          All rights reserved.
+        ------------------------------------------------------------------------------->
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet"
+        />
+        <script src="../extra/libs/highlight.min.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/customization.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "adastra-theme" : "adastra-theme";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('adastra-theme')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../playground.html">Playground</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="../user-guide/syntax-overview.html">Syntax Overview</a></li><li class="chapter-item expanded "><a href="../user-guide/control-flow.html">Control Flow</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user-guide/control-flow/variables.html">Variables</a></li><li class="chapter-item expanded "><a href="../user-guide/control-flow/expression-statements.html">Expression Statements</a></li><li class="chapter-item expanded "><a href="../user-guide/control-flow/nested-blocks.html">Nested Blocks</a></li><li class="chapter-item expanded "><a href="../user-guide/control-flow/imports.html">Imports</a></li><li class="chapter-item expanded "><a href="../user-guide/control-flow/loop-statements.html">Loop Statements</a></li><li class="chapter-item expanded "><a href="../user-guide/control-flow/conditional-branching.html">Conditional Branching</a></li><li class="chapter-item expanded "><a href="../user-guide/control-flow/returning-statements.html">Returning Statements</a></li></ol></li><li class="chapter-item expanded "><a href="../user-guide/expressions.html">Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user-guide/expressions/operators-priority.html">Operators Priority</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/arrays.html">Arrays</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/nil-data.html">Nil Data</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/strings.html">Strings</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/numbers.html">Numbers</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/booleans.html">Booleans</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/ranges.html">Ranges</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/functions.html">Functions</a></li><li class="chapter-item expanded "><a href="../user-guide/expressions/structures.html">Structures</a></li></ol></li><li class="chapter-item expanded "><a href="../user-guide/mutability.html">Mutability</a></li><li class="chapter-item expanded "><a href="../user-guide/type-system.html">Type System</a></li><li class="chapter-item expanded "><a href="../user-guide/memory-model.html">Memory Model</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Developer Guide</li><li class="chapter-item expanded "><a href="../developer-guide/api-overview.html" class="active">API Overview</a></li><li class="chapter-item expanded "><a href="../developer-guide/exporting.html">Exporting</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../developer-guide/exporting/script-packages.html">Script Packages</a></li><li class="chapter-item expanded "><a href="../developer-guide/exporting/functions.html">Functions</a></li><li class="chapter-item expanded "><a href="../developer-guide/exporting/structs.html">Structs</a></li><li class="chapter-item expanded "><a href="../developer-guide/exporting/operators.html">Operators</a></li><li class="chapter-item expanded "><a href="../developer-guide/exporting/comments.html">Comments</a></li><li class="chapter-item expanded "><a href="../developer-guide/exporting/statics-and-consts.html">Statics and Consts</a></li><li class="chapter-item expanded "><a href="../developer-guide/exporting/advanced-export.html">Advanced Export</a></li></ol></li><li class="chapter-item expanded "><a href="../developer-guide/analysis.html">Analysis</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../developer-guide/analysis/access-guards.html">Access Guards</a></li><li class="chapter-item expanded "><a href="../developer-guide/analysis/module-text.html">Module Text</a></li><li class="chapter-item expanded "><a href="../developer-guide/analysis/diagnostics.html">Diagnostics</a></li><li class="chapter-item expanded "><a href="../developer-guide/analysis/editing.html">Editing</a></li><li class="chapter-item expanded "><a href="../developer-guide/analysis/advanced-analysis.html">Advanced Analysis</a></li></ol></li><li class="chapter-item expanded "><a href="../developer-guide/evaluation.html">Evaluation</a></li><li class="chapter-item expanded "><a href="../developer-guide/language-server.html">Language Server</a></li><li class="chapter-item expanded "><a href="../developer-guide/web-assembly.html">Web Assembly</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">The Ad Astra Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Eliah-Lakhin/ad-astra" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!------------------------------------------------------------------------------
+  This file is part of "Ad Astra", an embeddable scripting programming
+  language platform.
+
+  This work is proprietary software with source-available code.
+
+  To copy, use, distribute, or contribute to this work, you must agree to
+  the terms of the General License Agreement:
+
+  https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+
+  The agreement grants a Basic Commercial License, allowing you to use
+  this work in non-commercial and limited commercial products with a total
+  gross revenue cap. To remove this commercial limit for one of your
+  products, you must acquire a Full Commercial License.
+
+  If you contribute to the source code, documentation, or related materials,
+  you must grant me an exclusive license to these contributions.
+  Contributions are governed by the "Contributions" section of the General
+  License Agreement.
+
+  Copying the work in parts is strictly forbidden, except as permitted
+  under the General License Agreement.
+
+  If you do not or cannot agree to the terms of this Agreement,
+  do not use this work.
+
+  This work is provided "as is", without any warranties, express or implied,
+  except where such disclaimers are legally invalid.
+
+  Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+  All rights reserved.
+------------------------------------------------------------------------------->
+<h1 id="api-overview"><a class="header" href="#api-overview">API Overview</a></h1>
+<p>The Ad Astra project aims to develop an embedded scripting language
+infrastructure integrated into end applications.</p>
+<p>Typically, this infrastructure includes the following components:</p>
+<ul>
+<li>A script compiler and interpreter.</li>
+<li>A static code analyzer that verifies the syntax and semantic consistency of
+script source code, printing possible diagnostic errors and warnings to the
+terminal (or another output).</li>
+<li>Language extensions for code editors to assist users during script
+development.</li>
+<li>A source code formatter program.</li>
+</ul>
+<p>The Ad Astra <a href="https://crates.io/crates/ad-astra">crate</a> provides the necessary
+APIs to implement these components for a custom domain-specific scripting
+language based on the Ad Astra language.</p>
+<p>The <a href="https://github.com/Eliah-Lakhin/ad-astra/tree/master/work/examples">examples</a>
+directory in the Ad Astra repository contains sample setups.</p>
+<p>This tutorial will guide you through the most common API functions of the crate.
+For in-depth learning, refer to the
+<a href="https://docs.rs/ad-astra">API Documentation</a>.</p>
+<h2 id="language-customization"><a class="header" href="#language-customization">Language Customization</a></h2>
+<p>To extend the base language, you can export Rust APIs such as module types,
+functions, methods, operators, etc., into the script environment using the
+<a href="https://docs.rs/ad-astra/1.0.0/ad_astra/attr.export.html">#[export]</a> attribute
+macro.</p>
+<pre><code class="language-rust">#[export]
+pub fn round(value: f64) -&gt; i64 {
+    value.round() as i64
+}
+
+#[export]
+impl Matrix {
+    pub fn rotation(angle: f64) -&gt; Self {
+        let (sin, cos) = angle.sin_cos();
+
+        Self {
+            x: Vector { x: cos, y: -sin },
+            y: Vector { x: sin, y: cos },
+        }
+    }
+}</code></pre>
+<p>The underlying Rust items will be introspected by the macro and exposed in the
+script, fulfilling the script's domain-specific environment.</p>
+<p>The <code>#[export]</code> macro has certain configuration options that will be explained
+in the tutorial, but typically, exporting works without extra effort.</p>
+<p>The <a href="https://github.com/Eliah-Lakhin/ad-astra/tree/master/work/examples/algebra/src/lib.rs">Algebra Example</a>
+demonstrates a typical use of the export macro.</p>
+<h2 id="analyzer-and-interpreter"><a class="header" href="#analyzer-and-interpreter">Analyzer and Interpreter</a></h2>
+<p>To implement the analyzer for a script module, you instantiate a
+<a href="https://docs.rs/ad-astra/1.0.0/ad_astra/analysis/struct.ScriptModule.html">ScriptModule</a>
+object into which you load the source text of the script.</p>
+<p>For example, you can load the text from disk:</p>
+<pre><code class="language-rust ignore">let text = read_to_string(&amp;cli.path).expect("Script file read error.");
+
+let module = ScriptModule::new(Package::meta(), text);</code></pre>
+<p>After creating the script module, you can query this object for diagnostic
+errors and warnings and print them to the terminal.</p>
+<pre><code class="language-rust ignore">let handle = TriggerHandle::new();
+let read_guard = module.read(&amp;handle, 1).expect("Module read error.");
+
+let diagnostics = read_guard.diagnostics(1).expect("Module analysis error.");
+
+if !diagnostics.is_empty() {
+    // Prints all errors and warnings, if any.
+    println!("{}", diagnostics.highlight(&amp;read_guard.text(), !0));
+}</code></pre>
+<p>If there are no errors, you can compile the script module into assembly and run
+this assembly in the Ad Astra Virtual Machine.</p>
+<pre><code class="language-rust ignore">let assembly = read_guard.compile().expect("Script compilation error.");
+
+match script_fn.run() {
+    Ok(_) =&gt; println!("Script execution finished."),
+
+    // Otherwise, prints the runtime error.
+    Err(error) =&gt; println!(
+        "Script execution failure:\n{}",
+        error.display(&amp;read_guard.text()),
+    ),
+}</code></pre>
+<p>Depending on your implementation goals, you can continuously watch the source
+code file for changes and repeat the above steps to provide continuous script
+execution.</p>
+<p>The <a href="https://github.com/Eliah-Lakhin/ad-astra/tree/master/work/examples/runner">Runner Example</a>
+demonstrates this kind of setup.</p>
+<h2 id="code-editor-extension"><a class="header" href="#code-editor-extension">Code Editor Extension</a></h2>
+<p>As a separate program, you can configure and run a language server that
+interacts with the code editor through the
+<a href="https://microsoft.github.io/language-server-protocol/">LSP</a> protocol. This
+server assists the script user in the editor with code completions, type hints,
+identifier references, and many other features useful for live code development.</p>
+<pre><code class="language-rust ignore">fn main() {
+    LspServer::startup(
+        LspServerConfig::new(),
+        LspLoggerConfig::new(),
+        LspTransportConfig::Stdio,
+        Package::meta(),
+    );
+}</code></pre>
+<p>The <a href="https://github.com/Eliah-Lakhin/ad-astra/tree/master/work/examples/lsp-server">LSP Server Example</a>
+demonstrates a language server setup.</p>
+<p>To implement the code editor extension, you need to create an LSP client as a
+plugin for the code editor. This implementation is editor-specific, so you
+should consult the documentation of the particular editor you are targeting.</p>
+<p>The <a href="https://github.com/Eliah-Lakhin/ad-astra/tree/master/work/examples/lsp-client">LSP Client Example</a>
+is a sample LSP client setup for VS Code.</p>
+<h2 id="code-formatter"><a class="header" href="#code-formatter">Code Formatter</a></h2>
+<p>Additionally, you can set up a separate Rust program that formats the source
+text of the Ad Astra script into a canonical form.</p>
+<p>The <a href="https://docs.rs/ad-astra/1.0.0/ad_astra/format/fn.format_script_text.html">ad_astra::format::format_script_text</a>
+function takes a string of the source code, formats it, and returns the
+formatted version of the text.</p>
+<p>This setup is optional, as the LSP server offers built-in formatting
+capabilities.</p>
+<h2 id="web-assembly-build"><a class="header" href="#web-assembly-build">Web-Assembly Build</a></h2>
+<p>The Ad Astra crate is WASM-compatible. Specifically, you can implement a special
+setup of the script language infrastructure, including the language's runner and
+code editor, that works entirely within a web browser without requiring a
+separate web server.</p>
+<p>The <a href="https://github.com/Eliah-Lakhin/ad-astra/tree/master/work/examples/wasm">WebAssembly Example</a>
+demonstrates a setup of the script language runner and the LSP server compatible
+with the <code>wasm32</code> target. In this setup, the server-side operates in the
+browser's web worker, while the client side is a customized Monaco editor that
+interacts with the local LSP server running in the web worker.</p>
+<p>This example is also available in the <a href="../playground.html">Ad Astra Playground</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../user-guide/memory-model.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../developer-guide/exporting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../user-guide/memory-model.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../developer-guide/exporting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+
+
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+let counter = 0;
+
+let function_factory = fn() {
+    counter += 1;
+
+    let id = *counter;
+
+    return fn(callback) callback(id);
+};
+
+let func_1 = function_factory();
+let func_2 = function_factory();
+let func_3 = function_factory();
+let func_4 = function_factory();
+
+dbg(func_1(fn(x) x * 10));
+dbg(func_2(fn(x) x * 10));
+dbg(func_3(fn(x) x * 10));
+dbg(func_4(fn(x) x * 10));
+dbg(func_3(fn(x) x * 10));
+dbg(func_2(fn(x) x * 10));
+dbg(func_1(fn(x) x * 10));

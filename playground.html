@@ -1,0 +1,728 @@
+<!DOCTYPE HTML>
+<html lang="en" class="adastra-theme" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Playground - The Ad Astra Book</title>
+
+
+        <!-- Custom HTML head -->
+        <!------------------------------------------------------------------------------
+          This file is part of "Ad Astra", an embeddable scripting programming
+          language platform.
+        
+          This work is proprietary software with source-available code.
+        
+          To copy, use, distribute, or contribute to this work, you must agree to
+          the terms of the General License Agreement:
+        
+          https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+        
+          The agreement grants a Basic Commercial License, allowing you to use
+          this work in non-commercial and limited commercial products with a total
+          gross revenue cap. To remove this commercial limit for one of your
+          products, you must acquire a Full Commercial License.
+        
+          If you contribute to the source code, documentation, or related materials,
+          you must grant me an exclusive license to these contributions.
+          Contributions are governed by the "Contributions" section of the General
+          License Agreement.
+        
+          Copying the work in parts is strictly forbidden, except as permitted
+          under the General License Agreement.
+        
+          If you do not or cannot agree to the terms of this Agreement,
+          do not use this work.
+        
+          This work is provided "as is", without any warranties, express or implied,
+          except where such disclaimers are legally invalid.
+        
+          Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+          All rights reserved.
+        ------------------------------------------------------------------------------->
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet"
+        />
+        <script src="extra/libs/highlight.min.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/customization.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "adastra-theme" : "adastra-theme";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('adastra-theme')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="playground.html" class="active">Playground</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="user-guide/syntax-overview.html">Syntax Overview</a></li><li class="chapter-item expanded "><a href="user-guide/control-flow.html">Control Flow</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user-guide/control-flow/variables.html">Variables</a></li><li class="chapter-item expanded "><a href="user-guide/control-flow/expression-statements.html">Expression Statements</a></li><li class="chapter-item expanded "><a href="user-guide/control-flow/nested-blocks.html">Nested Blocks</a></li><li class="chapter-item expanded "><a href="user-guide/control-flow/imports.html">Imports</a></li><li class="chapter-item expanded "><a href="user-guide/control-flow/loop-statements.html">Loop Statements</a></li><li class="chapter-item expanded "><a href="user-guide/control-flow/conditional-branching.html">Conditional Branching</a></li><li class="chapter-item expanded "><a href="user-guide/control-flow/returning-statements.html">Returning Statements</a></li></ol></li><li class="chapter-item expanded "><a href="user-guide/expressions.html">Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user-guide/expressions/operators-priority.html">Operators Priority</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/arrays.html">Arrays</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/nil-data.html">Nil Data</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/strings.html">Strings</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/numbers.html">Numbers</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/booleans.html">Booleans</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/ranges.html">Ranges</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/functions.html">Functions</a></li><li class="chapter-item expanded "><a href="user-guide/expressions/structures.html">Structures</a></li></ol></li><li class="chapter-item expanded "><a href="user-guide/mutability.html">Mutability</a></li><li class="chapter-item expanded "><a href="user-guide/type-system.html">Type System</a></li><li class="chapter-item expanded "><a href="user-guide/memory-model.html">Memory Model</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Developer Guide</li><li class="chapter-item expanded "><a href="developer-guide/api-overview.html">API Overview</a></li><li class="chapter-item expanded "><a href="developer-guide/exporting.html">Exporting</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="developer-guide/exporting/script-packages.html">Script Packages</a></li><li class="chapter-item expanded "><a href="developer-guide/exporting/functions.html">Functions</a></li><li class="chapter-item expanded "><a href="developer-guide/exporting/structs.html">Structs</a></li><li class="chapter-item expanded "><a href="developer-guide/exporting/operators.html">Operators</a></li><li class="chapter-item expanded "><a href="developer-guide/exporting/comments.html">Comments</a></li><li class="chapter-item expanded "><a href="developer-guide/exporting/statics-and-consts.html">Statics and Consts</a></li><li class="chapter-item expanded "><a href="developer-guide/exporting/advanced-export.html">Advanced Export</a></li></ol></li><li class="chapter-item expanded "><a href="developer-guide/analysis.html">Analysis</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="developer-guide/analysis/access-guards.html">Access Guards</a></li><li class="chapter-item expanded "><a href="developer-guide/analysis/module-text.html">Module Text</a></li><li class="chapter-item expanded "><a href="developer-guide/analysis/diagnostics.html">Diagnostics</a></li><li class="chapter-item expanded "><a href="developer-guide/analysis/editing.html">Editing</a></li><li class="chapter-item expanded "><a href="developer-guide/analysis/advanced-analysis.html">Advanced Analysis</a></li></ol></li><li class="chapter-item expanded "><a href="developer-guide/evaluation.html">Evaluation</a></li><li class="chapter-item expanded "><a href="developer-guide/language-server.html">Language Server</a></li><li class="chapter-item expanded "><a href="developer-guide/web-assembly.html">Web Assembly</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">The Ad Astra Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Eliah-Lakhin/ad-astra" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!------------------------------------------------------------------------------
+  This file is part of "Ad Astra", an embeddable scripting programming
+  language platform.
+
+  This work is proprietary software with source-available code.
+
+  To copy, use, distribute, or contribute to this work, you must agree to
+  the terms of the General License Agreement:
+
+  https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+
+  The agreement grants a Basic Commercial License, allowing you to use
+  this work in non-commercial and limited commercial products with a total
+  gross revenue cap. To remove this commercial limit for one of your
+  products, you must acquire a Full Commercial License.
+
+  If you contribute to the source code, documentation, or related materials,
+  you must grant me an exclusive license to these contributions.
+  Contributions are governed by the "Contributions" section of the General
+  License Agreement.
+
+  Copying the work in parts is strictly forbidden, except as permitted
+  under the General License Agreement.
+
+  If you do not or cannot agree to the terms of this Agreement,
+  do not use this work.
+
+  This work is provided "as is", without any warranties, express or implied,
+  except where such disclaimers are legally invalid.
+
+  Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+  All rights reserved.
+------------------------------------------------------------------------------->
+<style>
+html.adastra-theme {
+    --content-max-width: 950px;
+}
+
+#example-select {
+    background: #e0e0e0;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+}
+
+#example-select option {
+    font-size: 18px;
+}
+
+#example-select:focus {
+    outline: none;
+}
+
+#loading {
+    visibility: visible;
+    opacity: 1;
+}
+
+#loading.loading-visible {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s 100ms, opacity 250ms linear;
+}
+
+#loading.loading-hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 250ms, opacity 250ms linear;
+}
+</style>
+<script
+    src="extra/libs/require.min.js"
+    data-main="extra/playground"
+></script>
+<h1 id="playground"><a class="header" href="#playground">Playground</a></h1>
+<div style="display: flex; flex-direction: column; height: 80vh;">
+    <div style="
+        padding: 2px 10px;
+        background: #e0e0e0;
+        border-radius: 10px 10px 0 0;
+        border-style: solid;
+        border-color: #b3b6b7;
+        border-width: 1px 1px 0 1px;
+    ">
+        <label style="display: flex;">
+            <select id="example-select" style="flex-grow: 1" disabled>
+                <option value="algebra" selected>Algebra — Using Rust API from scripts</option>
+                <option value="collatz">Collatz — Control flow constructions</option>
+                <option value="mutability">Mutability — Passing by reference</option>
+                <option value="closures">Closures — Functions are first-order objects</option>
+                <option value="structs">OOP — Script structs with fields and methods</option>
+                <option value="quicksort">Quicksort — Functions recursion</option>
+            </select>
+        </label>
+    </div>
+    <div
+        id="editor-container"
+        style="
+            position: relative;
+            padding: 0;
+            flex: 1;
+            background: #424949;
+            border-style: solid;
+            border-color: #b3b6b7;
+            border-width: 1px 1px 0 1px;
+        "
+    >
+        <div
+            id="loading"
+            class="loading-visible"
+            style="
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                background-color:rgba(66, 73, 73, 0.85);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1;
+            "
+        >
+            <div style="
+                min-width: 250px;
+                padding: 0;
+            ">
+                <div style="
+                    background: #e0e0e0;
+                    border-radius: 10px 10px 0 0;
+                    border-style: solid;
+                    border-color: #b3b6b7;
+                    border-width: 1px 1px 0 1px;
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    text-align: center;
+                    padding: 5px 0;
+                ">Loading...</div>
+                <ul style="
+                    list-style: none;
+                    padding: 20px;
+                    margin: 0;
+                    background: #b3b6b7;
+                    border-color: #b3b6b7;
+                    border-radius: 0 0 10px 10px;
+                    border-style: solid;
+                    border-width: 0 1px 1px 1px;
+                ">
+                    <li>
+                        <i
+                            id="loading-client"
+                            class="fa fa-check"
+                            aria-hidden="true"
+                            style="visibility: hidden; color: #229954; margin-right: 5px;"
+                        ></i>
+                        Language Client
+                    </li>
+                    <li>
+                        <i
+                            id="loading-server"
+                            class="fa fa-check"
+                            aria-hidden="true"
+                            style="visibility: hidden; color: #229954; margin-right: 5px;"
+                        ></i>
+                        Language Server <span id="loading-server-progress"></span>
+                    </li>
+                    <li>
+                        <i
+                            id="loading-example"
+                            class="fa fa-check"
+                            aria-hidden="true"
+                            style="visibility: hidden; color: #229954; margin-right: 5px;"
+                        ></i>
+                        Example File <span id="loading-example-progress"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div
+            id="editor"
+            style="
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                background: #424949;
+            "
+        ></div>
+    </div>
+    <div style="padding: 0; margin: 0; display: flex; width: 100%;;">
+        <div style="
+            background: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0 0 0 10px;
+            border-style: solid;
+            border-color: #b3b6b7;
+            border-width: 0 0 1px 1px;
+        ">
+            <div style="display: flex; flex-direction: column; flex-grow: 1;">
+                <button
+                    id="editor-launch-btn"
+                    title="Run Script"
+                    style="
+                        padding: 0;
+                        margin: 0;
+                        width: 50px;
+                        height: 50px;
+                        font-size: 2.25em;
+                        color: #229954;
+                        background: none;
+                        border: none;
+                    "
+                >
+                    <i class="fa fa-play"></i>
+                </button>
+                <button
+                    id="editor-stop-btn"
+                    title="Stop Script Evaluation"
+                    style="
+                        display: none;
+                        padding: 0;
+                        margin: 0;
+                        width: 50px;
+                        height: 50px;
+                        font-size: 2.25em;
+                        color: #ba4a00;
+                        background: none;
+                        border: none;
+                    "
+                >
+                    <i class="fa fa-stop"></i>
+                </button>
+                <button
+                    id="editor-cleanup-btn"
+                    title="Cleanup Debug Messages"
+                    style="
+                        display: none;
+                        padding: 0;
+                        margin: 0;
+                        width: 50px;
+                        height: 50px;
+                        font-size: 2.25em;
+                        color: #d4ac0d;
+                        background: none;
+                        border: none;
+                    "
+                >
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <button
+                    id="editor-hints-btn"
+                    title="Show Extra Hints"
+                    style="
+                        padding: 0;
+                        margin: 0;
+                        width: 50px;
+                        height: 50px;
+                        font-size: 2.25em;
+                        color: #b3b6b7;
+                        background: none;
+                        border: none;
+                    "
+                >
+                    <i class="fa fa-commenting-o"></i>
+                </button>
+            </div>
+        </div>
+        <code
+            id="editor-console"
+            class="language-adastra-console"
+            style="
+                padding: 10px;
+                margin: 0;
+                flex: 1;
+                border: 0 !important;
+                border-radius: 0 0 10px 0;
+                background: #b3b6b7;
+                color: #000;
+                height: 160px;
+                overflow: auto;
+                white-space: nowrap;
+            "
+        >
+        <div style="color: #626567;">
+            Shortcuts:<br/>
+            - Pressing Ctrl+S in the editor formats the code.<br/>
+            - Pressing Ctrl+Space opens the code completion menu.<br/>
+            - Pressing Ctrl+Click on a variable or field jumps to its definition.<br/>
+            - Press F2 on a variable or field to rename it.<br/>
+        </div>
+        </code>
+    </div>
+</div>
+<h2 id="exported-rust-module"><a class="header" href="#exported-rust-module">Exported Rust Module</a></h2>
+<p>The source code above can use exported constructions from Rust's
+<a href="https://github.com/Eliah-Lakhin/ad-astra/tree/master/work/examples/exporting/src/lib.rs">algebra.rs</a>
+module via the script's <code>use algebra;</code> import statement.</p>
+<pre><code class="language-rust ignore">use std::{
+    f64::consts::PI,
+    fmt::{Display, Formatter},
+    ops::{Add, Mul, Neg},
+};
+
+use ad_astra::export;
+
+/// An example package with basic 2D coordinate system transformation features.
+#[export(package)]
+#[derive(Default)]
+struct Package;
+
+/// Converts degrees to radians.
+#[export]
+pub fn deg(degrees: f64) -&gt; f64 {
+    PI * degrees / 180.0
+}
+
+/// Converts radians to degrees.
+#[export]
+pub fn rad(radians: f64) -&gt; f64 {
+    180.0 * radians / PI
+}
+
+/// Rounds a floating-point number up to the nearest integer.
+#[export]
+pub fn round(value: f64) -&gt; i64 {
+    value.round() as i64
+}
+
+/// A 2D vector.
+#[export]
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Vector {
+    /// The x-coordinate of the vector.
+    pub x: f64,
+
+    /// The y-coordinate of the vector.
+    pub y: f64,
+}
+
+#[export]
+impl Neg for Vector {
+    type Output = Self;
+
+    fn neg(mut self) -&gt; Self::Output {
+        self.x = -self.x;
+        self.y = -self.y;
+
+        self
+    }
+}
+
+#[export]
+impl Add for Vector {
+    type Output = Self;
+
+    fn add(mut self, rhs: Self) -&gt; Self::Output {
+        self.x += rhs.x;
+        self.y += rhs.y;
+
+        self
+    }
+}
+
+#[export]
+impl Display for Vector {
+    fn fmt(&amp;self, f: &amp;mut Formatter&lt;'_&gt;) -&gt; std::fmt::Result {
+        f.write_fmt(format_args!("vec({}, {})", self.x, self.y))
+    }
+}
+
+#[export]
+impl Vector {
+    /// Constructs a new 2D vector.
+    #[export(name "vec")]
+    pub fn new(x: f64, y: f64) -&gt; Self {
+        Self { x, y }
+    }
+
+    /// Returns the magnitude (or length) of the vector.
+    pub fn radius(&amp;self) -&gt; f64 {
+        (self.x * self.x + self.y * self.y).sqrt()
+    }
+
+    /// Returns the angle of the vector in the 2D coordinate system.
+    pub fn angle(&amp;self) -&gt; f64 {
+        self.y.atan2(self.x)
+    }
+
+    /// Normalizes this vector by setting its magnitude to 1 while preserving
+    /// the original angle.
+    pub fn normalize(&amp;mut self) -&gt; &amp;mut Self {
+        let r = self.radius();
+
+        self.x /= r;
+        self.y /= r;
+
+        self
+    }
+
+    /// Transforms this vector using the provided transformation matrix.
+    pub fn transform(&amp;mut self, matrix: &amp;Matrix) -&gt; &amp;mut Self {
+        let x = matrix.x.x * self.x + matrix.x.y * self.y;
+        let y = matrix.y.x * self.x + matrix.y.y * self.y;
+
+        self.x = x;
+        self.y = y;
+
+        self
+    }
+}
+
+/// A 2x2 transformation matrix.
+#[export]
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Matrix {
+    x: Vector,
+    y: Vector,
+}
+
+#[export]
+impl Mul for Matrix {
+    type Output = Self;
+
+    fn mul(self, rhs: Matrix) -&gt; Self::Output {
+        Self {
+            x: Vector {
+                x: self.x.x * rhs.x.x + self.x.y * rhs.y.x,
+                y: self.x.x * rhs.x.y + self.x.y * rhs.y.y,
+            },
+            y: Vector {
+                x: self.y.x * rhs.x.x + self.y.y * rhs.y.x,
+                y: self.y.x * rhs.x.y + self.y.y * rhs.y.y,
+            },
+        }
+    }
+}
+
+#[export]
+impl Matrix {
+    /// Creates a 2x2 transformation matrix that rotates the coordinate system
+    /// by the specified angle in radians.
+    pub fn rotation(angle: f64) -&gt; Self {
+        let (sin, cos) = angle.sin_cos();
+
+        Self {
+            x: Vector { x: cos, y: -sin },
+            y: Vector { x: sin, y: cos },
+        }
+    }
+
+    /// Computes the determinant of this matrix.
+    pub fn det(&amp;self) -&gt; f64 {
+        self.x.x * self.y.y - self.x.y * self.y.x
+    }
+
+    /// Constructs a new matrix that is the inverse of this one.
+    pub fn invert(&amp;self) -&gt; Self {
+        let det = self.det();
+
+        Self {
+            x: Vector {
+                x: self.y.y / det,
+                y: -self.x.y / det,
+            },
+            y: Vector {
+                x: -self.y.x / det,
+                y: self.x.x / det,
+            },
+        }
+    }
+}</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="user-guide/syntax-overview.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="user-guide/syntax-overview.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+
+
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

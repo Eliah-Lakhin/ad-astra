@@ -1,0 +1,372 @@
+<!DOCTYPE HTML>
+<html lang="en" class="adastra-theme" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Conditional Branching - The Ad Astra Book</title>
+
+
+        <!-- Custom HTML head -->
+        <!------------------------------------------------------------------------------
+          This file is part of "Ad Astra", an embeddable scripting programming
+          language platform.
+        
+          This work is proprietary software with source-available code.
+        
+          To copy, use, distribute, or contribute to this work, you must agree to
+          the terms of the General License Agreement:
+        
+          https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+        
+          The agreement grants a Basic Commercial License, allowing you to use
+          this work in non-commercial and limited commercial products with a total
+          gross revenue cap. To remove this commercial limit for one of your
+          products, you must acquire a Full Commercial License.
+        
+          If you contribute to the source code, documentation, or related materials,
+          you must grant me an exclusive license to these contributions.
+          Contributions are governed by the "Contributions" section of the General
+          License Agreement.
+        
+          Copying the work in parts is strictly forbidden, except as permitted
+          under the General License Agreement.
+        
+          If you do not or cannot agree to the terms of this Agreement,
+          do not use this work.
+        
+          This work is provided "as is", without any warranties, express or implied,
+          except where such disclaimers are legally invalid.
+        
+          Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+          All rights reserved.
+        ------------------------------------------------------------------------------->
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet"
+        />
+        <script src="../../extra/libs/highlight.min.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/customization.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "adastra-theme" : "adastra-theme";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('adastra-theme')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../../playground.html">Playground</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="../../user-guide/syntax-overview.html">Syntax Overview</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow.html">Control Flow</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user-guide/control-flow/variables.html">Variables</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/expression-statements.html">Expression Statements</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/nested-blocks.html">Nested Blocks</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/imports.html">Imports</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/loop-statements.html">Loop Statements</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/conditional-branching.html" class="active">Conditional Branching</a></li><li class="chapter-item expanded "><a href="../../user-guide/control-flow/returning-statements.html">Returning Statements</a></li></ol></li><li class="chapter-item expanded "><a href="../../user-guide/expressions.html">Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user-guide/expressions/operators-priority.html">Operators Priority</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/arrays.html">Arrays</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/nil-data.html">Nil Data</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/strings.html">Strings</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/numbers.html">Numbers</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/booleans.html">Booleans</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/ranges.html">Ranges</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/functions.html">Functions</a></li><li class="chapter-item expanded "><a href="../../user-guide/expressions/structures.html">Structures</a></li></ol></li><li class="chapter-item expanded "><a href="../../user-guide/mutability.html">Mutability</a></li><li class="chapter-item expanded "><a href="../../user-guide/type-system.html">Type System</a></li><li class="chapter-item expanded "><a href="../../user-guide/memory-model.html">Memory Model</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Developer Guide</li><li class="chapter-item expanded "><a href="../../developer-guide/api-overview.html">API Overview</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting.html">Exporting</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../developer-guide/exporting/script-packages.html">Script Packages</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/functions.html">Functions</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/structs.html">Structs</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/operators.html">Operators</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/comments.html">Comments</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/statics-and-consts.html">Statics and Consts</a></li><li class="chapter-item expanded "><a href="../../developer-guide/exporting/advanced-export.html">Advanced Export</a></li></ol></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis.html">Analysis</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../developer-guide/analysis/access-guards.html">Access Guards</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/module-text.html">Module Text</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/diagnostics.html">Diagnostics</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/editing.html">Editing</a></li><li class="chapter-item expanded "><a href="../../developer-guide/analysis/advanced-analysis.html">Advanced Analysis</a></li></ol></li><li class="chapter-item expanded "><a href="../../developer-guide/evaluation.html">Evaluation</a></li><li class="chapter-item expanded "><a href="../../developer-guide/language-server.html">Language Server</a></li><li class="chapter-item expanded "><a href="../../developer-guide/web-assembly.html">Web Assembly</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">The Ad Astra Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Eliah-Lakhin/ad-astra" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!------------------------------------------------------------------------------
+  This file is part of "Ad Astra", an embeddable scripting programming
+  language platform.
+
+  This work is proprietary software with source-available code.
+
+  To copy, use, distribute, or contribute to this work, you must agree to
+  the terms of the General License Agreement:
+
+  https://github.com/Eliah-Lakhin/ad-astra/blob/master/EULA.md
+
+  The agreement grants a Basic Commercial License, allowing you to use
+  this work in non-commercial and limited commercial products with a total
+  gross revenue cap. To remove this commercial limit for one of your
+  products, you must acquire a Full Commercial License.
+
+  If you contribute to the source code, documentation, or related materials,
+  you must grant me an exclusive license to these contributions.
+  Contributions are governed by the "Contributions" section of the General
+  License Agreement.
+
+  Copying the work in parts is strictly forbidden, except as permitted
+  under the General License Agreement.
+
+  If you do not or cannot agree to the terms of this Agreement,
+  do not use this work.
+
+  This work is provided "as is", without any warranties, express or implied,
+  except where such disclaimers are legally invalid.
+
+  Copyright (c) 2024 Ilya Lakhin (Илья Александрович Лахин).
+  All rights reserved.
+------------------------------------------------------------------------------->
+<h1 id="conditional-branching"><a class="header" href="#conditional-branching">Conditional Branching</a></h1>
+<p>Ad Astra provides two conditional statements that control the flow of execution
+based on a conditional expression: the simple single-branching <code>if</code> statement
+and the multi-branching <code>match</code> statement.</p>
+<h2 id="if-statement"><a class="header" href="#if-statement">If Statement</a></h2>
+<pre><code class="language-adastra">if 20 &gt; 10 {
+    // Body
+}
+</code></pre>
+<p>The if-statement evaluates the provided expression to a boolean value. If the
+value is <code>true</code>, the body block will be executed; otherwise, the block will be
+skipped.</p>
+<p>In Ad Astra, if statements do not have "else" branches
+(e.g., <code>if foo {} else {}</code> syntax is <strong>forbidden</strong>). For multi-branching logic,
+you should use match statements instead.</p>
+<h2 id="match-statement"><a class="header" href="#match-statement">Match Statement</a></h2>
+<p>In Ad Astra, the multi-branching match statement serves the purpose of
+"switching" conditional branching, and it comes in two forms: a match statement
+with a subject and a match statement without a subject.</p>
+<pre><code class="language-adastra">match subject {
+    10 =&gt; {},
+    20 =&gt; {},
+    else =&gt; {},
+}
+
+match {
+    foo &gt; 10 =&gt; {},
+    bar &lt; 20 =&gt; {},
+    else =&gt; {},
+}
+</code></pre>
+<p>The body of the match statement (the code enclosed in <code>{...}</code> curly braces)
+consists of match arms. Each arm contains a testing <em>expression</em> specified
+before the <code>=&gt;</code> arrow and an arm <em>body</em> specified after the arrow.</p>
+<p>Match arms are separated by <code>,</code> commas, with an optional trailing comma. If the
+arm's body is a code block, the comma separator can be omitted.</p>
+<p>As the body, the user can specify either a code block or an expression, which
+will be interpreted as a block with a single expression statement.</p>
+<p>The script engine executes match arms one by one in the order they are
+specified.</p>
+<p>If the match statement has a subject expression, the engine tests for equality
+between the subject value and the arm's expression. If the statement does not
+have a subject, the engine interprets the arm's expression as a boolean.</p>
+<p>Once the engine finds the first truthful arm, it executes its body and ends the
+match statement.</p>
+<p>For example, an "if-else" branching could be expressed as follows:</p>
+<pre><code class="language-adastra">match foo &gt; 10 {
+    true =&gt; dbg("foo is greater than 10"),
+    false =&gt; dbg("foo is less than or equal to 10"),
+}
+</code></pre>
+<p>The "switch" branching could be expressed as follows:</p>
+<pre><code class="language-adastra">match foo {
+    2 =&gt; dbg("foo is equal to 2"),
+    7 =&gt; dbg("foo is equal to 7"),
+    else =&gt;  dbg("foo is neither 2 nor 7"),
+}
+</code></pre>
+<h2 id="exhaustiveness"><a class="header" href="#exhaustiveness">Exhaustiveness</a></h2>
+<p>Exhaustiveness means that the conditional branching covers all possible
+conditions.</p>
+<p>The <code>if</code> statement is never exhaustive unless the conditional expression is a
+trivial <code>true</code> or <code>false</code> literal, because this statement does not have a
+fallback "else" case.</p>
+<p>The <code>match</code> statement can be exhaustive if it covers all possibilities.
+For example, if the statement has match arms covering both <code>true</code> and <code>false</code>
+values.</p>
+<p>To make the match branching explicitly exhaustive, you can introduce a special
+fallback arm: <code>else =&gt; {}</code> (the "else" keyword is a built-in construct).</p>
+<p>This fallback arm should be the last one in the list of match arms, and it will
+be executed as the final option if all previous conditions fail.</p>
+<h2 id="variable-initialization"><a class="header" href="#variable-initialization">Variable Initialization</a></h2>
+<p>You can conditionally initialize a variable using an <em>exhaustive</em> match
+statement.</p>
+<pre><code class="language-adastra">let x;
+
+match foo {
+    "bar" =&gt; x = 10,
+    "baz" =&gt; x = 20,
+    else =&gt; x = 30,
+}
+
+// Variable `x` is fully initialized here.
+
+dbg(x);
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../user-guide/control-flow/loop-statements.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../user-guide/control-flow/returning-statements.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../user-guide/control-flow/loop-statements.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../user-guide/control-flow/returning-statements.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+
+
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

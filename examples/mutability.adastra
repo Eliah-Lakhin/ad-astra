@@ -1,0 +1,14 @@
+let original = 100;
+let ref_a = original;
+let ref_b = ref_a;
+let ref_c = ref_b;
+let copy = *ref_c;
+
+copy = 200;
+ref_b = 300;
+
+dbg(original);
+dbg(ref_a);
+dbg(ref_b);
+dbg(ref_c);
+dbg(copy);
