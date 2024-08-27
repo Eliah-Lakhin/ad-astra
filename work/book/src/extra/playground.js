@@ -64,10 +64,6 @@ const CLIENT_CAPABILITIES = {
 };
 
 const LANGUAGE_ID = 'adastra';
-const LSP_WORKER_PATH = '/extra/lsp/lsp-worker.js';
-const RUNNER_WORKER_PATH = '/extra/lsp/runner-worker.js';
-const WASM_MODULE_PATH = '/extra/lsp/wasm-module.wasm';
-const EXAMPLE_PATH = 'examples/name.adastra';
 
 const OK_MESSAGE_COLOR = '#196f3d';
 const ERR_MESSAGE_COLOR = '#7b241c';
@@ -102,12 +98,43 @@ const MONACO_OPTIONS = {
     automaticLayout: true,
 };
 
-require.config({
-    paths: {
-        'vs/editor': 'libs',
-        js: 'lsp',
-    },
-});
+const IS_LOCAL = window.location.hostname === 'localhost';
+
+console.log('LOCAL MODE:', IS_LOCAL);
+
+let LSP_WORKER_PATH = '/extra/lsp/lsp-worker.js';
+let RUNNER_WORKER_PATH = '/extra/lsp/runner-worker.js';
+let WASM_MODULE_PATH = '/extra/lsp/wasm-module.wasm';
+let WASM_MODULE_CACHE = 'default';
+let WASM_MODULE_SIZE = 11337581;
+let EXAMPLE_PATH = '/examples/name.adastra';
+let EXAMPLE_CACHE = 'default';
+let EXAMPLE_SWITCH_TIMEOUT = 0;
+
+switch (IS_LOCAL) {
+    case true:
+        require.config({
+            paths: {
+                'vs/editor': '/extra/libs',
+                js: '/extra/lsp',
+            },
+        });
+        break;
+
+    case false:
+        const GH_PAGES_CDN = 'https://cdn.jsdelivr.net/gh/Eliah-Lakhin/ad-astra@gh-pages';
+
+        require.config({
+            paths: {
+                vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.47.0/min/vs',
+                js: `${GH_PAGES_CDN}/extra/lsp`,
+            },
+        });
+
+        WASM_MODULE_PATH = `${GH_PAGES_CDN}${WASM_MODULE_PATH}`;
+        EXAMPLE_PATH = `${GH_PAGES_CDN}${EXAMPLE_PATH}`;
+        break;
+}
 
 require([
     'js/lsp-server',
@@ -127,8 +154,13 @@ require([
         INTERFACE_HIGHLIGHT: '#616a6b',
     });
 
-    const CONTAINER_ELEMENT = document.getElementById('editor-container');
-    const LOADING_PLACEHOLDER_ELEMENT = document.getElementById('editor-placeholder');
+    const EDITOR_ELEMENT = document.getElementById('editor');
+    const LOADING_ELEMENT = document.getElementById('loading');
+    const LOADING_CLIENT_ELEMENT = document.getElementById('loading-client');
+    const LOADING_SERVER_ELEMENT = document.getElementById('loading-server');
+    const LOADING_SERVER_PROGRESS_ELEMENT = document.getElementById('loading-server-progress');
+    const LOADING_EXAMPLE_ELEMENT = document.getElementById('loading-example');
+    const LOADING_EXAMPLE_PROGRESS_ELEMENT = document.getElementById('loading-example-progress');
     const LAUNCH_ELEMENT = document.getElementById('editor-launch-btn');
     const CLEANUP_ELEMENT = document.getElementById('editor-cleanup-btn');
     const STOP_ELEMENT = document.getElementById('editor-stop-btn');
@@ -136,46 +168,144 @@ require([
     const EDITOR_CONSOLE_ELEMENT = document.getElementById('editor-console');
     const EXAMPLE_SELECT_ELEMENT = document.getElementById('example-select');
 
-    LOADING_PLACEHOLDER_ELEMENT.remove();
-
     const LSP_SERVER = new LspServer(
         CLIENT_NAME,
         CLIENT_CAPABILITIES,
         LSP_WORKER_PATH,
         WASM_MODULE_PATH,
+        WASM_MODULE_CACHE,
+        (progress) => {
+            updateUIState({ server: progress.loaded });
+        }
     );
     const LSP_CLIENT = new LspClient(
         CLIENT_CAPABILITIES,
         LANGUAGE_ID,
-        CONTAINER_ELEMENT,
+        EDITOR_ELEMENT,
         MONACO_OPTIONS
     );
-    const RUNNER_SERVER = new RunnerServer(RUNNER_WORKER_PATH, WASM_MODULE_PATH);
+    const RUNNER_SERVER = new RunnerServer(
+        RUNNER_WORKER_PATH,
+        WASM_MODULE_PATH,
+        WASM_MODULE_CACHE,
+    );
 
-    let show_hints = false;
+    let uiState = {
+        loading: false,
+        client: false,
+        server: false,
+        example: false,
+        launched: false,
+        messages: false,
+        interrupt: false,
+        hints: false,
+    };
 
-    function setLaunchingState(run) {
-        switch (run) {
+    updateUIState({ client: true });
+
+    function updateUIState(state) {
+        Object.assign(uiState, state || {});
+
+        let loadingSteps = 0;
+
+        switch (uiState.client) {
+            case true:
+                LOADING_CLIENT_ELEMENT.style.visibility = 'visible';
+                loadingSteps += 1;
+                break;
+            case false:
+                LOADING_CLIENT_ELEMENT.style.visibility = 'hidden';
+                break;
+        }
+
+        if (uiState.server === true) {
+            LOADING_SERVER_ELEMENT.style.visibility = 'visible';
+            LOADING_SERVER_PROGRESS_ELEMENT.innerHTML = '';
+            loadingSteps += 1;
+        } else {
+            switch (typeof uiState.server) {
+                case 'number':
+                    const percents =
+                        Math.round(100 * uiState.server / WASM_MODULE_SIZE);
+
+                    LOADING_SERVER_PROGRESS_ELEMENT.innerHTML = `(${percents}%)`;
+                    break;
+                default:
+                    LOADING_SERVER_PROGRESS_ELEMENT.innerHTML = '';
+                    break;
+            }
+
+            LOADING_SERVER_ELEMENT.style.visibility = 'hidden';
+        }
+
+        if (uiState.example === true) {
+            LOADING_EXAMPLE_ELEMENT.style.visibility = 'visible';
+            LOADING_EXAMPLE_PROGRESS_ELEMENT.innerHTML = '';
+            loadingSteps += 1;
+        } else {
+            switch (typeof uiState.example) {
+                case 'number':
+                    LOADING_EXAMPLE_PROGRESS_ELEMENT.innerHTML =
+                        `(${uiState.example} Bytes)`;
+                    break;
+                default:
+                    LOADING_EXAMPLE_PROGRESS_ELEMENT.innerHTML = '';
+                    break;
+            }
+
+            LOADING_EXAMPLE_ELEMENT.style.visibility = 'hidden';
+        }
+
+        uiState.loading = loadingSteps < 3;
+
+        switch (uiState.loading) {
+            case true:
+                LOADING_ELEMENT.className = 'loading-visible';
+                break;
+            case false:
+                LOADING_ELEMENT.className = 'loading-hidden';
+                break;
+        }
+
+        switch (uiState.loading || uiState.launched) {
+            case true:
+                EXAMPLE_SELECT_ELEMENT.setAttribute('disabled', 'disabled');
+                break;
+
+            case false:
+                EXAMPLE_SELECT_ELEMENT.removeAttribute('disabled');
+                break;
+        }
+
+        switch (uiState.launched) {
             case true:
                 LAUNCH_ELEMENT.style.display = 'none';
                 STOP_ELEMENT.style.display = '';
-                EXAMPLE_SELECT_ELEMENT.setAttribute('disabled', 'disabled');
                 break;
             case false:
                 LAUNCH_ELEMENT.style.display = '';
                 STOP_ELEMENT.style.display = 'none';
-                EXAMPLE_SELECT_ELEMENT.removeAttribute('disabled');
                 break;
         }
-    }
 
-    function setMessagesState(hasMessages) {
-        switch (hasMessages) {
+        switch (uiState.messages) {
             case true:
                 CLEANUP_ELEMENT.style.display = '';
                 break;
             case false:
                 CLEANUP_ELEMENT.style.display = 'none';
+                break;
+        }
+
+        switch (uiState.hints) {
+            case true:
+                HINTS_ELEMENT.title = 'Hide extra hints';
+                HINTS_ELEMENT.style.color = '#7b7d7d';
+                break;
+
+            case false:
+                HINTS_ELEMENT.title = 'Show extra hints';
+                HINTS_ELEMENT.style.color = '#b3b6b7';
                 break;
         }
     }
@@ -224,31 +354,52 @@ require([
 
     const serverInitialized = LSP_SERVER.initializeServer();
 
-    let interruptFlag = false;
     let modelLoaded;
 
     const languageInitialized = serverInitialized.then(() => {
+        updateUIState({ server: true });
+
         LSP_CLIENT.createLanguage(LSP_SERVER);
-        LSP_CLIENT.renderInlayHints({ parameters: show_hints });
+        LSP_CLIENT.renderInlayHints({ parameters: uiState.hints });
         LSP_SERVER.clientInitialized();
     });
 
     function syncExample() {
+        updateUIState({
+            example: false,
+            messages: false,
+            launched: false,
+            interrupt: true,
+        });
+
         let name = EXAMPLE_SELECT_ELEMENT.value;
 
-        interruptFlag = true;
         LSP_CLIENT.clearLineMessages();
         LSP_CLIENT.renderInlayHints();
         LSP_CLIENT.lockModel();
-        setLaunchingState(false);
-        setMessagesState(false);
 
         EXAMPLE_SELECT_ELEMENT.setAttribute('disabled', 'disabled');
 
-        modelLoaded = LSP_CLIENT.loadModel(EXAMPLE_PATH.replace(/name/g, name));
+        modelLoaded = LSP_CLIENT
+            .loadModel(
+                EXAMPLE_PATH.replace(/name/g, name),
+                EXAMPLE_CACHE,
+                `inmemory://${name}.adastra`,
+                ({ loaded }) => {
+                    updateUIState({ example: loaded });
+                }
+            )
+            .then(() => {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve();
+                        updateUIState({ example: true });
+                    }, EXAMPLE_SWITCH_TIMEOUT)
+                });
+            });
 
         Promise.all([languageInitialized, modelLoaded]).then(() => {
-            interruptFlag = false;
+            updateUIState({ interrupt: false });
 
             LSP_CLIENT.syncModel();
             LSP_CLIENT.unlockModel();
@@ -264,30 +415,37 @@ require([
     let lastRender = Date.now();
 
     RUNNER_SERVER.onResultOk((result) => {
+        updateUIState({ launched: false });
         LSP_CLIENT.renderInlayHints();
         console.log('ok', result);
-        setLaunchingState(false);
         printToConsole(
-            'Evaluation finished. Result is ' + result + '.',
+            `Evaluation finished. Result is ${result}.`,
             OK_MESSAGE_COLOR,
         );
     });
 
     RUNNER_SERVER.onResultErr((result, line) => {
         if (result === 'interrupt') {
+            updateUIState({
+                launched: false,
+                messages: true,
+                interrupt: false,
+            });
+
             console.log('interrupted on line', line);
             LSP_CLIENT.setLineMessage(line, {
                 label: ' ❗ interrupted',
             });
             LSP_CLIENT.renderInlayHints();
-            setMessagesState(true);
             return;
         }
+
+        updateUIState({ launched: false });
+
         console.log('err\n', result);
-        setLaunchingState(false);
 
         printToConsole(
-            'Evaluation error.\n' + result,
+            `Evaluation error.\n${result}`,
             ERR_MESSAGE_COLOR,
         );
     });
@@ -296,7 +454,7 @@ require([
         switch (report.kind) {
             case 1:
             case 2:
-                return !interruptFlag;
+                return !uiState.interrupt;
 
             case 3:
                 printToConsole(
@@ -305,11 +463,11 @@ require([
                 );
 
                 LSP_CLIENT.setLineMessage(report.line, {
-                    label: ' ≈ ' + report.label,
+                    label: ` ≈ ${report.label}`,
                     tooltip: report.tooltip,
                 });
 
-                setMessagesState(true);
+                updateUIState({ messages: true });
 
                 const now = Date.now();
 
@@ -324,53 +482,50 @@ require([
     });
 
     LAUNCH_ELEMENT.addEventListener('click', () => {
+        if (uiState.loading) {
+            return;
+        }
+
         const uri = LSP_CLIENT.modelUri();
         const text = LSP_CLIENT.modelText();
 
         LSP_CLIENT.clearLineMessages();
         LSP_CLIENT.renderInlayHints();
 
-        setMessagesState(false);
+        updateUIState({
+            messages: false,
+            interrupt: false,
+            launched: true,
+        });
 
-        interruptFlag = false;
         lastRender = Date.now();
 
         printToConsole('Evaluation started.');
 
         RUNNER_SERVER.launch(uri, text);
-
-        setLaunchingState(true);
     });
 
     STOP_ELEMENT.addEventListener('click', () => {
+        updateUIState({
+            interrupt: true,
+            launched: false,
+        });
+
         printToConsole('Evaluation interrupted.', ERR_MESSAGE_COLOR);
-        interruptFlag = true;
-        setLaunchingState(false);
     });
 
     CLEANUP_ELEMENT.addEventListener('click', () => {
         LSP_CLIENT.clearLineMessages();
         LSP_CLIENT.renderInlayHints();
-        setMessagesState(false);
+
+        updateUIState({ messages: false });
     });
 
     HINTS_ELEMENT.addEventListener('click', () => {
-        show_hints = !show_hints;
-
-        switch (show_hints) {
-            case true:
-                HINTS_ELEMENT.title = 'Hide extra hints';
-                HINTS_ELEMENT.style.color = '#7b7d7d';
-                break;
-
-            case false:
-                HINTS_ELEMENT.title = 'Show extra hints';
-                HINTS_ELEMENT.style.color = '#b3b6b7';
-                break;
-        }
+        updateUIState({ hints: !uiState.hints });
 
         languageInitialized.then(() => {
-            LSP_CLIENT.renderInlayHints({ parameters: show_hints });
+            LSP_CLIENT.renderInlayHints({ parameters: uiState.hints });
         });
     });
 

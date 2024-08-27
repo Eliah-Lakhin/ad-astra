@@ -79,9 +79,52 @@ function setup({ wasmFile, wasmCache }) {
 
     console.log('Preparing LSP worker...');
 
-    const assembly = fetch(wasmFile, { cache: wasmCache });
+    const assembly = fetch(wasmFile, { cache: wasmCache })
+        .then((response) => {
+            const reader = response.body.getReader();
 
-    console.log('LSP worker assembly loaded.');
+            let loaded = 0;
+
+            const source = {
+                start: (controller) => {
+                    function enqueue(next) {
+                        return next.then(({ done, value }) => {
+                            if (done) {
+                                console.log('LSP worker assembly loaded.');
+                                controller.close();
+                                return Promise.resolve();
+                            }
+
+                            controller.enqueue(value);
+
+                            loaded += value.byteLength;
+
+                            self.postMessage(JSON.stringify({
+                                __action: 'loading',
+                                loaded,
+                            }));
+
+                            return enqueue(reader.read());
+                        });
+                    }
+
+                    return enqueue(reader.read());
+                },
+            };
+
+            const strategy = {
+                "status" : response.status,
+                "statusText" : response.statusText,
+            };
+
+            const newResponse = new Response(new ReadableStream(source, strategy));
+
+            for (let entry of response.headers.entries()) {
+                newResponse.headers.set(entry[0], entry[1]);
+            }
+
+            return newResponse;
+        });
 
     WebAssembly.instantiateStreaming(assembly, IMPORTS).then(({ instance }) => {
         console.log('LSP worker assembly instantiated.');

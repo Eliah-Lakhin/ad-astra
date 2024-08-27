@@ -52,6 +52,23 @@ html.adastra-theme {
 #example-select:focus {
     outline: none;
 }
+
+#loading {
+    visibility: visible;
+    opacity: 1;
+}
+
+#loading.loading-visible {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s 100ms, opacity 250ms linear;
+}
+
+#loading.loading-hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 250ms, opacity 250ms linear;
+}
 </style>
 
 <script
@@ -84,7 +101,7 @@ html.adastra-theme {
     <div
         id="editor-container"
         style="
-            display: flex;
+            position: relative;
             padding: 0;
             flex: 1;
             background: #424949;
@@ -92,21 +109,89 @@ html.adastra-theme {
             border-color: #b3b6b7;
             border-width: 1px 1px 0 1px;
         "
-    ><div
-        id="editor-placeholder"
-        style="
-            flex: 1;
-            padding: 0;
-            margin: 0;
-            color: #7f8c8d;
-            font-size: 1.4em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        "
     >
-        Loading...
-    </div></div>
+        <div
+            id="loading"
+            class="loading-visible"
+            style="
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                background-color:rgba(66, 73, 73, 0.85);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1;
+            "
+        >
+            <div style="
+                min-width: 250px;
+                padding: 0;
+            ">
+                <div style="
+                    background: #e0e0e0;
+                    border-radius: 10px 10px 0 0;
+                    border-style: solid;
+                    border-color: #b3b6b7;
+                    border-width: 1px 1px 0 1px;
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    text-align: center;
+                    padding: 5px 0;
+                ">Loading...</div>
+                <ul style="
+                    list-style: none;
+                    padding: 20px;
+                    margin: 0;
+                    background: #b3b6b7;
+                    border-color: #b3b6b7;
+                    border-radius: 0 0 10px 10px;
+                    border-style: solid;
+                    border-width: 0 1px 1px 1px;
+                ">
+                    <li>
+                        <i
+                            id="loading-client"
+                            class="fa fa-check"
+                            aria-hidden="true"
+                            style="visibility: hidden; color: #229954; margin-right: 5px;"
+                        ></i>
+                        Language Client
+                    </li>
+                    <li>
+                        <i
+                            id="loading-server"
+                            class="fa fa-check"
+                            aria-hidden="true"
+                            style="visibility: hidden; color: #229954; margin-right: 5px;"
+                        ></i>
+                        Language Server <span id="loading-server-progress"></span>
+                    </li>
+                    <li>
+                        <i
+                            id="loading-example"
+                            class="fa fa-check"
+                            aria-hidden="true"
+                            style="visibility: hidden; color: #229954; margin-right: 5px;"
+                        ></i>
+                        Example File <span id="loading-example-progress"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div
+            id="editor"
+            style="
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                background: #424949;
+            "
+        ></div>
+    </div>
     <div style="padding: 0; margin: 0; display: flex; width: 100%;;">
         <div style="
             background: #e0e0e0;

@@ -220,7 +220,12 @@ define(['vs/editor/editor.main', 'js/grammar'], function (monaco, grammar) {
         }
     }
 
-    return function LspClient(capabilities, languageId, domElement, options) {
+    return function LspClient(
+        capabilities,
+        languageId,
+        domElement,
+        options,
+    ) {
         options = Object.assign({}, options || {}, {
             domReadOnly: true,
             readOnly: true,
@@ -252,12 +257,56 @@ define(['vs/editor/editor.main', 'js/grammar'], function (monaco, grammar) {
             });
         };
 
-        this.loadModel = function (path, cache) {
+        this.loadModel = function (path, cache, modelUri, loadingFn) {
             cache = cache || 'no-cache';
-
-            const modelUri = 'inmemory://' + path;
+            modelUri = modelUri || `inmemory://${path}`;
 
             return fetch(path, { cache })
+                .then((response) => {
+                    if (!loadingFn) {
+                        return response;
+                    }
+
+                    const reader = response.body.getReader();
+
+                    let loaded = 0;
+
+                    const source = {
+                        start: (controller) => {
+                            function enqueue(next) {
+                                return next.then(({ done, value }) => {
+                                    if (done) {
+                                        controller.close();
+                                        return Promise.resolve();
+                                    }
+
+                                    controller.enqueue(value);
+
+                                    loaded += value.byteLength;
+
+                                    loadingFn({ loaded });
+
+                                    return enqueue(reader.read());
+                                });
+                            }
+
+                            return enqueue(reader.read());
+                        },
+                    };
+
+                    const strategy = {
+                        "status" : response.status,
+                        "statusText" : response.statusText,
+                    };
+
+                    const newResponse = new Response(new ReadableStream(source, strategy));
+
+                    for (let entry of response.headers.entries()) {
+                        newResponse.headers.set(entry[0], entry[1]);
+                    }
+
+                    return newResponse;
+                })
                 .then((response) => response.text())
                 .then((text) => {
                     model = monaco.editor.createModel(

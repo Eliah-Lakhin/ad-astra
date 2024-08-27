@@ -40,7 +40,8 @@ define(function () {
         clientCapabilities,
         workerFile,
         wasmFile,
-        wasmCache
+        wasmCache,
+        wasmLoadingFn,
     ) {
         workerFile = workerFile || '/js/lsp-worker.js';
         wasmFile = wasmFile || '/wasm-module.wasm';
@@ -80,11 +81,9 @@ define(function () {
             });
         }
 
-        function handleServerMessage(msg) {
-            const message = JSON.parse(msg);
-
+        function handleServerMessage(message) {
             if (message.jsonrpc !== '2.0') {
-                console.error('Missing "jsonrpc" in the server message.');
+                console.error('Missing "jsonrpc" in the server message.', message);
                 return;
             }
 
@@ -257,16 +256,29 @@ define(function () {
 
             const serverCapabilities = this.capabilities;
             serverWorker.onmessage = (msg) => {
+                let message;
+
                 switch (msg.data) {
                     case 'ready':
                         lspInitialize(serverCapabilities);
-                        break;
+                        return;
                     case 'terminate':
                         serverWorker.terminate();
                         console.warn('LSP server worker terminated.');
+                        return;
+                    default:
+                        message = JSON.parse(msg.data);
+                        break;
+                }
+
+                switch (message.__action) {
+                    case 'loading':
+                        if (!!wasmLoadingFn) {
+                            wasmLoadingFn(message);
+                        }
                         break;
                     default:
-                        handleServerMessage(msg.data);
+                        handleServerMessage(message);
                         break;
                 }
             };

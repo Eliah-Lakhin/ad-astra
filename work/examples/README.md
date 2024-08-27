@@ -199,7 +199,7 @@ To launch this example:
    For example, you can host these files using the
    [https](https://crates.io/crates/https) Rust local web server:
   - Install the server: `$ cargo install-update-config -e RUSTC_BOOTSTRAP=1 https`.
-  - From the `./wasm` directory, run `$ https`.
+  - From the `./wasm` directory, run `$ http`.
   - Open `http://localhost:8000/` in your browser.
 
 ## Quick Links
