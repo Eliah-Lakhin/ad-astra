@@ -105,7 +105,7 @@ impl ToTokens for Group {
         }
 
         quote_spanned! (span=>
-            #[no_mangle]
+            #[unsafe(no_mangle)]
             extern "C" fn #section() {
                 #[used]
                 #[cfg_attr(
@@ -117,7 +117,7 @@ impl ToTokens for Group {
                         target_os = "psp",
                         target_os = "freebsd",
                     ),
-                    link_section = "adastrexpr",
+                    unsafe(link_section = "adastrexpr"),
                 )]
                 #[cfg_attr(
                     any(

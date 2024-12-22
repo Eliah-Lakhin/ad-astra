@@ -474,7 +474,7 @@ impl<'a> FieldMeta<'a> {
                     unsafe fn by_ref(
                         from: *const #receiver_type,
                     ) -> *const #component_type {
-                        #addr_of((*from).#member)
+                        unsafe { #addr_of((*from).#member) }
                     }
 
                     #option::<unsafe fn(
@@ -498,7 +498,7 @@ impl<'a> FieldMeta<'a> {
                     unsafe fn by_mut(
                         from: *mut #receiver_type,
                     ) -> *mut #component_type {
-                        #addr_of_mut((*from).#member)
+                        unsafe { #addr_of_mut((*from).#member) }
                     }
 
                     #option::<unsafe fn(
