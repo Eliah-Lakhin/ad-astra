@@ -229,7 +229,7 @@ impl DeclarationGroup {
 
         let len = ((stop as usize) - (start as usize)) / size_of::<ExporterFn>();
 
-        let start = hint::black_box(start);
+        let start = std::hint::black_box(start);
 
         unsafe { slice::from_raw_parts::<'static, ExporterFn>(start, len) }
     }
