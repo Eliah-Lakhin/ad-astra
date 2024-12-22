@@ -1,0 +1,11 @@
+Cargo.lock
+target
+examples/lsp-client/node_modules
+examples/lsp-client/out
+examples/lsp-client/package-lock.json
+examples/wasm/wasm-module.wasm
+examples/wasm/example.adastra
+book/output
+book/src/examples
+book/src/extra/libs
+book/src/extra/lsp
