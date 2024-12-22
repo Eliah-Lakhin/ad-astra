@@ -88,7 +88,7 @@ impl Computable for Lifetimes {
                     doc,
                     context,
                     idents: idents.deref().as_ref(),
-                    gen: AHashMap::new(),
+                    generated: AHashMap::new(),
                     ident_drops: AHashSet::new(),
                     closure_drops: AHashMap::new(),
                     unused_vars: AHashSet::new(),
@@ -117,7 +117,7 @@ impl Computable for Lifetimes {
                     doc,
                     context,
                     idents: idents.deref().as_ref(),
-                    gen: AHashMap::new(),
+                    generated: AHashMap::new(),
                     ident_drops: AHashSet::new(),
                     closure_drops: AHashMap::new(),
                     unused_vars: AHashSet::new(),
@@ -159,7 +159,7 @@ struct LifetimeAnalyzer<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHashe
     doc: &'doc ScriptDoc,
     context: &'ctx mut AttrContext<'ctx_param, ScriptNode, H, S>,
     idents: &'doc LocalIdentMap,
-    gen: AHashMap<CompactString, Vec<GenDesc>>,
+    generated: AHashMap<CompactString, Vec<GenDesc>>,
     ident_drops: AHashSet<NodeRef>,
     closure_drops: AHashMap<NodeRef, AHashSet<CompactString>>,
     unused_vars: AHashSet<NodeRef>,
@@ -177,12 +177,12 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
 
         match isolation {
             Isolation::Nested => {
-                let gen_before = take(&mut self.gen);
+                let gen_before = take(&mut self.generated);
                 self.analyze_statements(statements)?;
-                let gen_after = replace(&mut self.gen, gen_before);
+                let gen_after = replace(&mut self.generated, gen_before);
 
                 for (name, gens) in gen_after {
-                    let Entry::Vacant(entry) = self.gen.entry(name) else {
+                    let Entry::Vacant(entry) = self.generated.entry(name) else {
                         continue;
                     };
 
@@ -191,9 +191,9 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
             }
 
             Isolation::Loop(iterator) => {
-                let gen_before = take(&mut self.gen);
+                let gen_before = take(&mut self.generated);
                 self.analyze_statements(statements)?;
-                let gen_after = replace(&mut self.gen, gen_before);
+                let gen_after = replace(&mut self.generated, gen_before);
 
                 let iterator_string = iterator.string(self.doc).unwrap_or("");
 
@@ -202,7 +202,7 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
                         continue;
                     }
 
-                    let Entry::Vacant(entry) = self.gen.entry(name) else {
+                    let Entry::Vacant(entry) = self.generated.entry(name) else {
                         continue;
                     };
 
@@ -287,7 +287,7 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
                 continue;
             };
 
-            let gen_before = take(&mut self.gen);
+            let gen_before = take(&mut self.generated);
 
             match handler.deref(self.doc) {
                 Some(ScriptNode::Block { statements, .. }) => {
@@ -305,10 +305,10 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
                 self.analyze_expr(inner)?;
             }
 
-            let gen_after = replace(&mut self.gen, gen_before);
+            let gen_after = replace(&mut self.generated, gen_before);
 
             for (name, mut gens) in gen_after {
-                if self.gen.contains_key(&name) {
+                if self.generated.contains_key(&name) {
                     continue;
                 }
 
@@ -325,7 +325,7 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
         }
 
         for (name, gens) in new_gens {
-            if self.gen.insert(name, gens).is_some() {
+            if self.generated.insert(name, gens).is_some() {
                 system_panic!("Duplicate gen entry.");
             }
         }
@@ -349,14 +349,14 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
             return Ok(());
         };
 
-        let Some(gens) = self.gen.remove(token_string) else {
+        let Some(gens) = self.generated.remove(token_string) else {
             let _ = self.unused_vars.insert(*var_ref);
 
             return Ok(());
         };
 
-        for gen in gens {
-            match gen {
+        for gen_desc in gens {
+            match gen_desc {
                 GenDesc::Ident(node_ref) => {
                     let _ = self.ident_drops.insert(node_ref);
                 }
@@ -438,11 +438,11 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
             .forward()?;
 
         for closure in closure_vec.vec.iter().rev() {
-            if self.gen.contains_key(closure) {
+            if self.generated.contains_key(closure) {
                 continue;
             }
 
-            let _ = self.gen.insert(closure.clone(), vec![GenDesc::Fn(*fn_ref)]);
+            let _ = self.generated.insert(closure.clone(), vec![GenDesc::Fn(*fn_ref)]);
         }
 
         Ok(())
@@ -477,11 +477,11 @@ impl<'doc, 'ctx, 'ctx_param, H: TaskHandle, S: SyncBuildHasher>
             return Ok(());
         };
 
-        if self.gen.contains_key(ident_string) {
+        if self.generated.contains_key(ident_string) {
             return Ok(());
         }
 
-        let _ = self.gen.insert(
+        let _ = self.generated.insert(
             CompactString::from(ident_string),
             vec![GenDesc::Ident(*ident_ref)],
         );

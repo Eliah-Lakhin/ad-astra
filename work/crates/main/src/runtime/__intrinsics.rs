@@ -158,7 +158,7 @@ impl DeclarationGroup {
         target_os = "freebsd"
     ))]
     fn exporters() -> &'static [ExporterFn] {
-        extern "Rust" {
+        unsafe extern "Rust" {
             #[link_name = "__start_adastrexpr"]
             static START: ExporterFn;
             #[link_name = "__stop_adastrexpr"]
@@ -166,7 +166,7 @@ impl DeclarationGroup {
         }
 
         #[used]
-        #[link_section = "adastrexpr"]
+        #[unsafe(link_section = "adastrexpr")]
         static mut EMPTY: [ExporterFn; 0] = [];
 
         let start = unsafe { addr_of!(START) };
@@ -179,7 +179,7 @@ impl DeclarationGroup {
 
     #[cfg(any(target_os = "macos", target_os = "ios", target_os = "tvos"))]
     fn exporters() -> &'static [ExporterFn] {
-        extern "Rust" {
+        unsafe extern "Rust" {
             #[link_name = "\x01section$start$__DATA$__adastrexpr"]
             static START: ExporterFn;
             #[link_name = "\x01section$end$__DATA$__adastrexpr"]
@@ -196,7 +196,7 @@ impl DeclarationGroup {
 
     #[cfg(any(target_os = "illumos"))]
     fn exporters() -> &'static [ExporterFn] {
-        extern "Rust" {
+        unsafe extern "Rust" {
             #[link_name = "__start_set_adastrexpr"]
             static START: ExporterFn;
             #[link_name = "__stop_set_adastrexpr"]
@@ -204,7 +204,7 @@ impl DeclarationGroup {
         }
 
         #[used]
-        #[link_section = "set_adastrexpr"]
+        #[unsafe(link_section = "set_adastrexpr")]
         static mut EMPTY: [ExporterFn; 0] = [];
 
         let start = unsafe { addr_of!(START) };
@@ -217,7 +217,7 @@ impl DeclarationGroup {
 
     #[cfg(target_os = "windows")]
     fn exporters() -> &'static [ExporterFn] {
-        extern "Rust" {
+        unsafe extern "Rust" {
             #[link_name = ".adastrexpr$a"]
             static START: [ExporterFn; 0];
             #[link_name = ".adastrexpr$c"]
