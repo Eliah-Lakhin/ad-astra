@@ -125,15 +125,15 @@ impl ToTokens for Group {
                         target_os = "ios",
                         target_os = "tvos",
                     ),
-                    link_section = "__DATA,__adastrexpr,regular,no_dead_strip",
+                    unsafe(link_section = "__DATA,__adastrexpr,regular,no_dead_strip"),
                 )]
                 #[cfg_attr(
                     any(target_os = "illumos"),
-                    link_section = "set_adastrexpr",
+                    unsafe(link_section = "set_adastrexpr"),
                 )]
                 #[cfg_attr(
                     any(target_os = "windows"),
-                    link_section = ".adastrexpr$b",
+                    unsafe(link_section = ".adastrexpr$b"),
                 )]
                 static __LINKED: extern "C" fn() = #section;
 
