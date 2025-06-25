@@ -216,7 +216,7 @@ impl DeclarationGroup {
     }
 
     #[cfg(any(target_os = "windows"))]
-    fn exporters2() -> &'static [ExporterFn] {
+    fn exporters() -> &'static [ExporterFn] {
         #[unsafe(link_section = ".adastrexpr$a")]
         static START: [ExporterFn; 0] = [];
         #[unsafe(link_section = ".adastrexpr$c")]
