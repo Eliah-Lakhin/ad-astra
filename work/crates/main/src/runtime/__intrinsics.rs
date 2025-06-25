@@ -215,14 +215,12 @@ impl DeclarationGroup {
         unsafe { slice::from_raw_parts::<'static, ExporterFn>(start, len) }
     }
 
-    #[cfg(target_os = "windows")]
-    fn exporters() -> &'static [ExporterFn] {
-        unsafe extern "Rust" {
-            #[link_name = ".adastrexpr$a"]
-            static START: [ExporterFn; 0];
-            #[link_name = ".adastrexpr$c"]
-            static STOP: [ExporterFn; 0];
-        }
+    #[cfg(any(target_os = "windows"))]
+    fn exporters2() -> &'static [ExporterFn] {
+        #[unsafe(link_section = ".adastrexpr$a")]
+        static START: [ExporterFn; 0] = [];
+        #[unsafe(link_section = ".adastrexpr$c")]
+        static STOP: [ExporterFn; 0] = [];
 
         let start = unsafe { addr_of!(START) } as *const ExporterFn;
         let stop = unsafe { addr_of!(STOP) } as *const ExporterFn;
